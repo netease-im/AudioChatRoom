@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_base_audio_ui"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.netease.audioroom.demo.widget.HeadImageView
+        android:id="@+id/iv_liver_avatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:src="@color/color_0888ff" />
+
+    <ImageView
+        android:id="@+id/iv_liver_audio_close_hint"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:layout_alignBottom="@id/iv_liver_avatar"
+        android:layout_alignRight="@id/iv_liver_avatar"
+        android:background="@drawable/audio_close_hint_red_bg"
+        android:src="@drawable/audio_close_hint"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+
+    <TextView
+        android:id="@+id/tv_liver_nick"
+        style="@style/TextStyle_Color_828282_Size_14sp"
+        android:layout_width="60dp"
+        android:layout_below="@id/iv_liver_avatar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="middle"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="主播昵称" />
+
+
+    <TextView
+        android:id="@+id/tv_chat_room_name"
+        style="@style/TextStyle_Color_828282_Size_14sp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="12dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        tools:text="房间：陈肉丸今天吃饭没(32人)" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tv_chat_room_name"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <!--禁言他人（聊天室消息）-->
+        <ImageView
+            android:id="@+id/iv_mute_other_text"
+            style="@style/Base_Audio_UI_Switch"
+            android:src="@drawable/mute_other_text" />
+
+
+        <!--音质切换-->
+        <ImageView
+            android:id="@+id/iv_audio_quality_switch"
+            style="@style/Base_Audio_UI_Switch"
+            android:src="@drawable/audio_quality_switch" />
+
+
+        <!--关闭话筒-->
+        <ImageView
+            android:id="@+id/iv_close_self_audio_switch"
+            style="@style/Base_Audio_UI_Switch"
+            android:src="@drawable/close_self_audio_switch" />
+
+
+        <!--关闭房间音频-->
+        <ImageView
+            android:id="@+id/iv_close_room_audio_switch"
+            style="@style/Base_Audio_UI_Switch"
+            android:src="@drawable/room_audio_switch" />
+
+        <!--连麦者主动下麦-->
+        <ImageView
+            android:id="@+id/iv_cancel_link"
+            style="@style/Base_Audio_UI_Switch"
+            android:src="@drawable/cancel_link" />
+
+
+        <!--退出房间-->
+        <ImageView
+            android:id="@+id/iv_exist_room"
+            style="@style/Base_Audio_UI_Switch"
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="0dp"
+            android:paddingTop="5dp"
+            android:src="@drawable/close_icon" />
+
+    </LinearLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcy_queue_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_liver_nick"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcy_chat_message_list"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        android:layout_below="@id/rcy_queue_list"
+        android:layout_marginBottom="56dp"
+        android:layout_marginTop="30dp" />
+
+
+    <EditText
+        android:id="@+id/edt_input_text"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="90dp"
+        android:background="@drawable/input_edit_bg"
+        android:hint="唠两句~"
+        android:paddingLeft="15dp"
+        android:textColor="@color/color_ffffff"
+        android:textColorHint="@color/color_525252" />
+
+    <TextView
+        android:id="@+id/tv_send_text"
+        android:layout_width="74dp"
+        android:layout_height="36dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/send_text_btn_bg"
+        android:gravity="center"
+        android:text="发送"
+        android:textColor="@color/color_ffffff"
+        android:textSize="16sp" />
+
+</RelativeLayout>
