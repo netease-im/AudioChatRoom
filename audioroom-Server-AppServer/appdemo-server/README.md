@@ -288,7 +288,7 @@ POST http://${Host}/room/mute HTTP/1.1Content-Type: application/x-www-form-urlen
 |roomId |long |是| 聊天室房间id|
 |mute |boolean| 是 |true-禁用，false-解除禁言|
 |needNotify |boolean |否 |是否通知，默认true|
-|notifyExt|boolean| 否 是否通知扩展字段，默认false|
+|notifyExt|boolean| 否 |是否通知扩展字段，默认false|
 ### 4.4.3 返回值
 ```
 {
