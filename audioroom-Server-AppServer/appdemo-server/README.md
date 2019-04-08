@@ -231,6 +231,7 @@ POST http://${Host}/user/get HTTP/1.1Content-Type: application/x-www-form-urlenc
 |参数名称 |参数类型 |是否必填 |参数说明|
 |---|----|----|---|
 |sid| String| 否| Session Id，为了简化登录机制，sid等于用户账号accid|
+
 接口请求时携带sid，只是说明客户端期望继续使用当前账号，服务器会判断当前账号是否已过期，如果当前账号已过期会重新分配账号。
 所以实际登录用户，以接口返回值为准，客户端注意进行切换，如果继续使用已过期账号，可能出现账号冲突。
 ### 4.2.3 返回值
@@ -259,7 +260,7 @@ POST http://${Host}/room/create HTTP/1.1Content-Type: application/x-www-form-url
 |参数名| 参数类型 |是否必填| 参数说明|
 |---|----|----|---|
 |sid| String| 是| 获取账号后的sid|
-roomName String 是 房间名称，1-16字符，只支持中文、数字和字母
+|roomName| String| 是| 房间名称，1-16字符，只支持中文、数字和字母|
 ### 4.3.3 返回值
 ```
 {
