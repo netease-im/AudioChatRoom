@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    <!-- 白名单IP -->
+	<util:list id="whiteIpList" value-type="java.lang.String">
+		<!-- 办公网出口ip -->
+		<value>59.111.198.55</value>
+		<value>59.111.198.56</value>
+		<value>59.111.198.100</value>
+		<value>59.111.198.101</value>
+		<value>59.111.198.102</value>
+		<value>123.58.160.131</value>
+		<value>123.58.160.138</value>
+		<value>123.58.160.153</value>
+		<value>123.58.160.154</value>
+		<value>123.58.160.155</value>
+	</util:list>
+
+	<!-- 服务器ip，任务限制本机调用 -->
+	<util:list id="hostIpList" value-type="java.lang.String">
+		<!-- 测试环境 -->
+		<value>10.165.148.241</value>
+		<!-- 线上环境 -->
+		<value>10.201.164.197</value>
+		<value>10.201.164.202</value>
+	</util:list>
+</beans>

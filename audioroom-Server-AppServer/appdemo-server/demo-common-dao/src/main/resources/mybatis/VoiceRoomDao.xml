@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.netease.mmc.demo.dao.VoiceRoomDao">
+  <resultMap id="voiceRoomDOMap" type="com.netease.mmc.demo.dao.domain.VoiceRoomDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="room_id" jdbcType="BIGINT" property="roomId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="thumbnail" jdbcType="VARCHAR" property="thumbnail" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+    <result column="visible" jdbcType="BIT" property="visible" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+  </resultMap>
+  <sql id="voiceRoomDO_Base_Column_List">
+    id, room_id, creator, `name`, thumbnail, `valid`, visible, created_at, updated_at
+  </sql>
+  <select id="findByPrimaryKey" parameterType="java.lang.Long" resultMap="voiceRoomDOMap">
+    select 
+    <include refid="voiceRoomDO_Base_Column_List" />
+    from demo_voice_room
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="listValidAndVisibleRooms" resultMap="voiceRoomDOMap">
+    select
+    <include refid="voiceRoomDO_Base_Column_List"/>
+    from demo_voice_room where valid = true and visible = true order by created_at desc limit #{limit} offset #{offset}
+  </select>
+  <select id="findByRoomId" resultMap="voiceRoomDOMap">
+    select
+    <include refid="voiceRoomDO_Base_Column_List"/>
+    from demo_voice_room where room_id = #{roomId}
+  </select>
+  <select id="countValidAndVisibleRooms" resultType="java.lang.Integer">
+    select count(*) from demo_voice_room where valid = true and visible = true
+  </select>
+  <select id="listValidRooms" resultMap="voiceRoomDOMap">
+    select
+    <include refid="voiceRoomDO_Base_Column_List"/>
+    from demo_voice_room where creator = #{creator} and valid = true
+  </select>
+  <select id="listValidRoomsCreatedBefore" resultMap="voiceRoomDOMap">
+    select
+    <include refid="voiceRoomDO_Base_Column_List"/>
+    from demo_voice_room where valid = true <![CDATA[
+    and created_at < from_unixtime(#{time})
+    ]]>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from demo_voice_room
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.netease.mmc.demo.dao.domain.VoiceRoomDO">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into demo_voice_room (room_id, creator, `name`, 
+      thumbnail, `valid`, visible,
+      created_at, updated_at
+    )
+    values (#{roomId,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{thumbnail,jdbcType=VARCHAR}, #{valid,jdbcType=BIT}, #{visible,jdbcType=BIT},
+    <choose>
+      <when test="createdAt != null">
+        #{createdAt},
+      </when>
+      <otherwise>
+        now(),
+      </otherwise>
+    </choose>
+    <choose>
+      <when test="updatedAt != null">
+        #{updatedAt}
+      </when>
+      <otherwise>
+        now()
+      </otherwise>
+    </choose>
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.netease.mmc.demo.dao.domain.VoiceRoomDO">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into demo_voice_room
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roomId != null">
+        room_id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="thumbnail != null">
+        thumbnail,
+      </if>
+      <if test="valid != null">
+        `valid`,
+      </if>
+      <if test="visible != null">
+        visible,
+      </if>
+      created_at, updated_at, 
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roomId != null">
+        #{roomId,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnail != null">
+        #{thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=BIT},
+      </if>
+      <if test="visible != null">
+        #{visible,jdbcType=BIT},
+      </if>
+      <choose>
+        <when test="createdAt != null">
+          #{createdAt},
+        </when>
+        <otherwise>
+          now(),
+        </otherwise>
+      </choose>
+      <choose>
+        <when test="updatedAt != null">
+          #{updatedAt},
+        </when>
+        <otherwise>
+          now(),
+        </otherwise>
+      </choose>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.netease.mmc.demo.dao.domain.VoiceRoomDO">
+    update demo_voice_room
+    <set>
+      <if test="roomId != null">
+        room_id = #{roomId,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnail != null">
+        thumbnail = #{thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="valid != null">
+        `valid` = #{valid,jdbcType=BIT},
+      </if>
+      <if test="visible != null">
+        visible = #{visible,jdbcType=BIT},
+      </if>
+      <choose>
+        <when test="updatedAt != null">
+          updated_at = #{updatedAt},
+        </when>
+        <otherwise>
+          updated_at = now(),
+        </otherwise>
+      </choose>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.netease.mmc.demo.dao.domain.VoiceRoomDO">
+    update demo_voice_room
+    set room_id = #{roomId,jdbcType=BIGINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      thumbnail = #{thumbnail,jdbcType=VARCHAR},
+      `valid` = #{valid,jdbcType=BIT},
+      visible = #{visible,jdbcType=BIT},
+    <choose>
+      <when test="updatedAt != null">
+        updated_at = #{updatedAt}
+      </when>
+      <otherwise>
+        updated_at = now()
+      </otherwise>
+    </choose>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateRoomValid">
+    update demo_voice_room set valid = #{valid} where room_id = #{roomId}
+  </update>
+</mapper>
