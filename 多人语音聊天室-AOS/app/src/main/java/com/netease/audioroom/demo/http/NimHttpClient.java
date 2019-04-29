@@ -136,7 +136,6 @@ public class NimHttpClient {
 
 
     private String post(String url, Map<String, String> headers, String body) {
-
         HttpResponse response;
         HttpPost request;
         try {

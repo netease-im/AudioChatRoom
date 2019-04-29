@@ -3,7 +3,6 @@ package com.netease.audioroom.demo.model;
 
 import com.netease.audioroom.demo.util.JsonUtil;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,13 +14,15 @@ public class AccountInfo implements Serializable {
     public final String nick;
     public final String token;
     public final String avatar;
+    public long availableAt;//应用服务器过期时间
 
 
-    public AccountInfo(String account, String nick, String token, String avatar) {
+    public AccountInfo(String account, String nick, String token, String avatar, long availableAt) {
         this.account = account;
         this.nick = nick;
         this.token = token;
         this.avatar = avatar;
+        this.availableAt = availableAt;
     }
 
 
@@ -38,6 +39,7 @@ public class AccountInfo implements Serializable {
         nick = jsonObject.optString("nick");
         token = jsonObject.optString("token");
         avatar = jsonObject.optString("avatar");
+        availableAt = jsonObject.optLong("availableAt");
     }
 
 
@@ -49,12 +51,11 @@ public class AccountInfo implements Serializable {
             jsonObject.put("nick", nick);
             jsonObject.put("token", token);
             jsonObject.put("avatar", avatar);
+            jsonObject.put("availableAt", availableAt);
             return jsonObject.toString();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
         return null;
     }
 }

@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
     <!-- 多媒体相关 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -41,8 +40,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTop"
@@ -58,22 +55,27 @@
             android:name=".activity.AudienceActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/ActivityStyle" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
             android:name=".activity.AudioLiveActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/ActivityStyle" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name=".activity.MemberActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MuteMemberListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
 
 
-        <!--0fbb6ba3ef9a98004153e3ff75ef1a2d-->
-
-        <!-- demo -->
-        <!--45c6af3c98409b18a84451215d0bdd6e-->
         <meta-data
             android:name="com.netease.nim.appKey"
-            android:value="0fbb6ba3ef9a98004153e3ff75ef1a2d" />
+            android:value="5887359c380d534ad99b33a07d8723e5" />
 
 
         <!-- 云信后台服务，请使用独立进程。 -->
@@ -117,6 +119,9 @@
             android:authorities="com.netease.audioroom.demo.ipc.provider"
             android:exported="false"
             android:process=":core" />
+
+        <receiver android:name=".receiver.NetworkConnectChangedReceiver" />
+
     </application>
 
 </manifest>

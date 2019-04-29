@@ -29,14 +29,15 @@
             tools:text="我" />
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rcy_chat_room_list"
+        <com.netease.audioroom.demo.widget.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+            android:id="@+id/pullLoadMoreRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/tv_self_nick"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="21dp"
             android:layout_marginRight="20dp" />
+
 
     </RelativeLayout>
 

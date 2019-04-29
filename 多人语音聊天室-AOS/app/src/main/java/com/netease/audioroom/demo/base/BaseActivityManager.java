@@ -8,11 +8,8 @@ public class BaseActivityManager {
 
     private Stack<Activity> activityStack;
 
-    private BaseActivityManager() {
+    private BaseActivityManager() {}
 
-    }
-
-    //单例
     public static BaseActivityManager getInstance() {
         return ActivityManagerHolder.instance;
     }
@@ -129,6 +126,10 @@ public class BaseActivityManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String getCurrentActivityName(){
+        return getCurrentActivity().getLocalClassName();
     }
 
 }

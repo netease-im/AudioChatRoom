@@ -14,7 +14,7 @@ import com.netease.nimlib.sdk.nos.util.NosThumbImageUtil;
 
 public class HeadImageView extends CircleImageView {
 
-    public static final int DEFAULT_AVATAR_THUMB_SIZE = (int) DemoCache.getContext().getResources().getDimension(R.dimen.avatar_max_size);
+    public static final int DEFAULT_AVATAR_THUMB_SIZE = (int) DemoCache.getContext().getResources().getDimension(R.dimen.avatar_size_default);
     private static final int DEFAULT_AVATAR_RES_ID = R.drawable.nim_avatar_default;
 
     public HeadImageView(Context context) {
@@ -36,6 +36,10 @@ public class HeadImageView extends CircleImageView {
      */
     public void loadAvatar(final String url) {
         doLoadImage(url, DEFAULT_AVATAR_RES_ID, DEFAULT_AVATAR_THUMB_SIZE);
+    }
+
+    public void loadAvatar(final String url, int size) {
+        doLoadImage(url, DEFAULT_AVATAR_RES_ID, size);
     }
 
 

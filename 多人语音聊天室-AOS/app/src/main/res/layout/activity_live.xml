@@ -1,11 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/semicircleView"
+        android:layout_width="@dimen/dimen_65"
+        android:layout_height="@dimen/dimen_35"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/semicircle"
+        android:gravity="center_horizontal"
+        android:textColor="@color/color_ffffff"
+        android:textSize="16sp"
+        tools:text="1" />
 
     <include
         layout="@layout/base_audio_ui"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+
+    <RelativeLayout
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="66dp"
+        android:background="@drawable/play_music_contronal"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+
+        <TextView
+            android:id="@+id/tv_music_play_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/color_c7c7c7" />
+
+        <ImageView
+            android:id="@+id/iv_pause_or_play"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@id/tv_music_play_hint"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/play_pause_state_bg" />
+
+        <ImageView
+            android:id="@+id/iv_next"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@id/tv_music_play_hint"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/iv_pause_or_play"
+            android:src="@drawable/music_control_next" />
+    </RelativeLayout>
+
 
 </FrameLayout>

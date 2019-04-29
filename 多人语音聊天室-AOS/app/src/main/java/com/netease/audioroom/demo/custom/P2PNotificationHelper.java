@@ -16,24 +16,27 @@ import org.json.JSONObject;
  * 用于发送点对点的通知消息
  */
 public class P2PNotificationHelper {
-
     public static final String COMMAND = "command"; //自定义命令标识
     public static final String INDEX = "index";//麦位
     public static final String NICK = "nick"; // 昵称
     public static final String AVATAR = "avatar";//头像
-
-
     /**
      * 请求连麦
      */
     public static final int REQUEST_LINK = 1;
-
+    /**
+     * 主动下麦
+     */
+    public static final int CANCEL_LINK = 2;
+    /**
+     * 观众取消连麦请求
+     */
+    public static final int CANCEL_REQUEST_LINK = 3;
 
     /**
      * 请求连麦
      */
     public static void requestLink(QueueInfo model, AccountInfo selfInfo, String creator, RequestCallback<Void> callback) {
-
         CustomNotification requestLink = new CustomNotification();
         requestLink.setSessionId(creator);
         requestLink.setSessionType(SessionTypeEnum.P2P);
@@ -50,6 +53,47 @@ public class P2PNotificationHelper {
             e.printStackTrace();
             callback.onException(e);
         }
-
     }
+
+    /**
+     * 主动下麦
+     */
+    public static void cancelLink(int queueIndex, String selfAccount, String creator, RequestCallback<Void> callback) {
+        CustomNotification requestLink = new CustomNotification();
+        requestLink.setSessionId(creator);
+        requestLink.setSessionType(SessionTypeEnum.P2P);
+        requestLink.setFromAccount(selfAccount);
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(COMMAND, CANCEL_LINK);
+            jsonObject.put(INDEX, queueIndex);
+            requestLink.setContent(jsonObject.toString());
+            NIMClient.getService(MsgService.class).sendCustomNotification(requestLink).setCallback(callback);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            callback.onException(e);
+        }
+    }
+
+    /**
+     * 观众取消连麦请求
+     */
+    public static void cancelLinkRequest(QueueInfo queueInfo, String selfAccount, String creator, RequestCallback<Void> callback) {
+        CustomNotification requestLink = new CustomNotification();
+        requestLink.setSessionId(creator);
+        requestLink.setSessionType(SessionTypeEnum.P2P);
+        requestLink.setFromAccount(selfAccount);
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(COMMAND, CANCEL_REQUEST_LINK);
+            jsonObject.put(INDEX, queueInfo.getIndex());
+            requestLink.setContent(jsonObject.toString());
+            NIMClient.getService(MsgService.class).sendCustomNotification(requestLink).setCallback(callback);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            callback.onException(e);
+        }
+    }
+
+
 }

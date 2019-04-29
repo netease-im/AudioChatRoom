@@ -52,28 +52,26 @@
     <!-- dialogfragment出现消失动画 -->
     <style name="Animation" parent="@android:style/Animation.Activity">
         <item name="android:windowEnterAnimation">@anim/anim_enter</item>
-        <item name="android:windowExitAnimation">@anim/anim_enter</item>
-        <item name="android:activityOpenEnterAnimation">@anim/anim_side_enter</item>
-        <item name="android:activityOpenExitAnimation">@anim/anim_side_exit</item>
-
+        <item name="android:windowExitAnimation">@anim/anim_exit</item>
     </style>
 
-    <style name="dialog_fragment">
-        <item name="android:windowBackground">@color/color_10_000000</item>
+    <style name="create_dialog_fragment">
+        <item name="android:windowBackground">@color/color_e6000000</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@style/Animation</item>
     </style>
 
+    <style name="request_dialog_Animation" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/anim_enter</item>
+        <item name="android:windowExitAnimation">@anim/anim_exit</item>
+    </style>
 
-    <!--Activity跳转文件-->
-
-    <style name="ActivityStyle" mce_bogus="1">
-               
-        <item name="android:windowAnimationStyle">@style/Animation</item>
-               
-        <item name="android:windowNoTitle">true</item>
-           
+    <style name="request_dialog_fragment">
+        <item name="android:windowBackground">@color/color_00000000</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowAnimationStyle">@style/request_dialog_Animation</item>
     </style>
 
 </resources>

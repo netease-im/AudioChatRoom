@@ -6,12 +6,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 
+import com.netease.audioroom.demo.base.LoginManager;
 import com.netease.audioroom.demo.widget.unitepage.loadsir.callback.BaseCallback;
 import com.netease.audioroom.demo.widget.unitepage.loadsir.callback.SuccessCallback;
 
 import java.util.List;
 
 public class LoadService<T> {
+
     private LoadLayout loadLayout;
     private Convertor<T> convertor;
 

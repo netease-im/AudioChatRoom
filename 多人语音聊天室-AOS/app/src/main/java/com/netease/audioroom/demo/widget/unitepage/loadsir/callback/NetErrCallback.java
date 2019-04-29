@@ -14,9 +14,7 @@ public class NetErrCallback extends BaseCallback {
 
     @Override
     protected boolean onReloadEvent(final Context context, View view) {
-
-//        ToastHelper.showToast("重联网络");
-
         return true;
     }
+
 }

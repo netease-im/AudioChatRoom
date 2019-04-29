@@ -1,14 +1,10 @@
 package com.netease.audioroom.demo.http;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.util.Log;
-
 
 import com.netease.audioroom.demo.cache.DemoCache;
 import com.netease.audioroom.demo.model.AccountInfo;
 import com.netease.audioroom.demo.model.DemoRoomInfo;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,12 +27,13 @@ public class ChatRoomHttpClient {
     private static final int RESULT_CODE_SUCCESS = 200;
 
     private static final String API__REL_SERVER = "https://app.yunxin.163.com/appdemo/voicechat/";
-    private static final String API_TEST_SERVER = "https://apptest.netease.im/appdemo/voicechat/";
+    private static final String API_TEST_SERVER = "http://apptest.netease.im:8080/appdemo/voicechat/";
     // api
     private static final String API_CHAT_ROOM_LIST = "room/list";
     private static final String API_GET_USER = "user/get";
     private static final String API_CREATE_ROOM = "room/create";
     private static final String API_CLOSE_ROOM = "room/dissolve";
+    private static final String API_ALL_MUTE = "room/mute";
 
 
     private static final String HEADER_KEY_CONTENT_TYPE = "Content-Type";
@@ -59,15 +56,17 @@ public class ChatRoomHttpClient {
     private static final String RESULT_KEY_NICK = "nickname";
     private static final String RESULT_KEY_TOKEN = "imToken";
     private static final String RESULT_KEY_AVATAR = "icon";
+    private static final String RESULT_KEY_AVAILABLEAT = "availableAt";
 
     // request
     private static final String REQUEST_LIMIT = "limit";
     private static final String REQUEST_OFFSET = "offset";
     private static final String REQUEST_SID = "sid";
     private static final String REQUEST_ROOM_NAME = "roomName"; // 直播间名字
+    private static final String REQUEST_IS_MUTE = "mute"; // 直播间名字
 
 
-    private boolean isTest = true;
+    private boolean isTest = false;
 
 
     public static ChatRoomHttpClient getInstance() {
@@ -82,10 +81,8 @@ public class ChatRoomHttpClient {
      * 向网易云信Demo应用服务器请求聊天室列表
      */
     public void fetchChatRoomList(int offset, int limit, final ChatRoomHttpCallback<ArrayList<DemoRoomInfo>> callback) {
-
         String url = getServer() + API_CHAT_ROOM_LIST;
         String body = null;
-
         if (offset >= 0 && limit > 0) {
             body = REQUEST_OFFSET + "=" + offset + "&" +
                     REQUEST_LIMIT + "=" + limit;
@@ -99,7 +96,6 @@ public class ChatRoomHttpClient {
                 if (callback == null) {
                     return;
                 }
-
                 if (code != 0) {
                     Log.e(TAG, "fetchChatRoomList failed : code = " + code + ", errorMsg = " + errorMsg);
                     callback.onFailed(code, errorMsg);
@@ -180,7 +176,8 @@ public class ChatRoomHttpClient {
                         String nick = data.optString(RESULT_KEY_NICK);
                         String token = data.optString(RESULT_KEY_TOKEN);
                         String avatar = data.optString(RESULT_KEY_AVATAR);
-                        AccountInfo accountInfo = new AccountInfo(account, nick, token, avatar);
+                        long availableAt = data.optLong(RESULT_KEY_AVAILABLEAT);
+                        AccountInfo accountInfo = new AccountInfo(account, nick, token, avatar, availableAt);
                         fetchAccountCallBack.onSuccess(accountInfo);
                         return;
                     }
@@ -253,9 +250,14 @@ public class ChatRoomHttpClient {
         });
     }
 
-
+    /**
+     * 解散房间
+     *
+     * @param account
+     * @param roomID
+     * @param callback
+     */
     public void closeRoom(String account, String roomID, final ChatRoomHttpCallback callback) {
-
         String url = getServer() + API_CLOSE_ROOM;
         Map<String, String> headers = new HashMap<>(2);
         headers.put(HEADER_KEY_CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8");
@@ -298,8 +300,60 @@ public class ChatRoomHttpClient {
     }
 
 
-    private String getServer() {
+    /**
+     * 禁言所有成员节目
+     *
+     * @param account
+     * @param roomID
+     * @param callback
+     */
+    public void muteAll(String account, String roomID, boolean mute, boolean needNotify, boolean notifyExt, final ChatRoomHttpCallback callback) {
 
+        String url = getServer() + API_ALL_MUTE;
+        Map<String, String> headers = new HashMap<>(5);
+        headers.put(HEADER_KEY_CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8");
+        String bodyString = REQUEST_SID + "=" + account + "&" +
+                RESULT_KEY_ROOM_ID + "=" + roomID + "&" +
+                REQUEST_IS_MUTE + "=" + mute + "&" +
+                "needNotify" + "=" + needNotify + "&" +
+                "notifyExt" + "=" + notifyExt;
+        NimHttpClient.getInstance().execute(url, headers, bodyString, new NimHttpClient.NimHttpCallback() {
+            @Override
+            public void onResponse(String response, int code, String errorMsg) {
+
+                if (callback == null) {
+                    return;
+                }
+                if (code != 0) {
+                    Log.e(TAG, "closeRoom failed : code = " + code + ", errorMsg = " + errorMsg);
+                    callback.onFailed(code, errorMsg);
+                    return;
+                }
+                Log.i(TAG, "closeRoom  : response = " + response);
+                try {
+                    JSONObject res = new JSONObject(response);
+                    int resCode = res.optInt(RESULT_KEY_RES);
+                    errorMsg = res.optString(RESULT_KEY_MSG, null);
+
+                    if (resCode == RESULT_CODE_SUCCESS) {
+                        callback.onSuccess(null);
+                        return;
+                    }
+
+                    Log.e(TAG, "closeRoom failed : code = " + code);
+                    callback.onFailed(resCode, errorMsg);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.onFailed(-1, e.getMessage());
+                }
+
+            }
+        });
+    }
+
+
+    private String getServer() {
         return isTest ? API_TEST_SERVER : API__REL_SERVER;
     }
 

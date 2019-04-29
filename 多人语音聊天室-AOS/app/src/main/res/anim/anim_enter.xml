@@ -20,19 +20,19 @@
     android:shareInterpolator="false"
     android:zAdjustment="top">
     <alpha
-        android:fromAlpha="0.0"
-        android:toAlpha="1.0"
-        android:interpolator="@android:anim/decelerate_interpolator"
-        android:fillEnabled="true"
+        android:duration="200"
+        android:fillAfter="true"
         android:fillBefore="false"
-        android:fillAfter="true"
-        android:duration="200" />
-    <translate
-        android:fromYDelta="8%"
-        android:toYDelta="0"
         android:fillEnabled="true"
-        android:fillBefore="true"
-        android:fillAfter="true"
+        android:fromAlpha="0.0"
         android:interpolator="@android:anim/decelerate_interpolator"
-        android:duration="300" />
+        android:toAlpha="1.0" />
+    <translate
+        android:duration="300"
+        android:fillAfter="true"
+        android:fillBefore="true"
+        android:fillEnabled="true"
+        android:fromYDelta="8%"
+        android:interpolator="@android:anim/decelerate_interpolator"
+        android:toYDelta="0" />
 </set>

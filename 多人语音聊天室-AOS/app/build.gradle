@@ -3,12 +3,19 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
+
         applicationId "com.netease.audioroom.demo"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        ndk {
+            //设置支持的SO库架构
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+        }
     }
+
+
     buildTypes {
         release {
             minifyEnabled true
@@ -34,4 +41,21 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.github.bumptech.glide:glide:4.2.0'
     implementation 'com.android.support:cardview-v7:27.1.1'
+
+    //一个侧滑的库
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+    // Optional, if you use support library fragments:
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
+
+    // 添加依赖。注意，版本号必须一致。
+    // 基础功能 (必需)
+    implementation 'com.netease.nimlib:basesdk:6.1.1'
+    // 音视频需要
+    implementation 'com.netease.nimlib:nrtc:6.1.1'
+    // 音视频需要
+    implementation 'com.netease.nimlib:avchat:6.1.1'
+    implementation 'com.netease.nimlib:chatroom:6.1.1'
 }

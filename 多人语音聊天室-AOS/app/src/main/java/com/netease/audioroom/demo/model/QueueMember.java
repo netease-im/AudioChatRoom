@@ -2,35 +2,30 @@ package com.netease.audioroom.demo.model;
 
 import android.text.TextUtils;
 
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 
 /**
- * 陈列中的成员信息
+ * 队列中的成员信息
  */
 public class QueueMember implements Serializable {
 
     private static final String ACCOUNT_KEY = "account";
     private static final String NICK_KEY = "nick";
     private static final String AVATAR_KEY = "avatar";
-    private static final String MUTED_AUDIO_KEY = "muted";
 
 
     private String account;
     private String nick;
     private String avatar;
-    private boolean isMutedAudio;
 
 
-    public QueueMember(String account, String nick, String avatar, boolean isMutedAudio) {
+    public QueueMember(String account, String nick, String avatar) {
         this.account = account;
         this.nick = nick;
         this.avatar = avatar;
-        this.isMutedAudio = isMutedAudio;
     }
 
 
@@ -42,13 +37,8 @@ public class QueueMember implements Serializable {
         account = jsonObject.optString(ACCOUNT_KEY);
         nick = jsonObject.optString(NICK_KEY);
         avatar = jsonObject.optString(AVATAR_KEY);
-        isMutedAudio = jsonObject.optInt(MUTED_AUDIO_KEY) == 1;
     }
 
-
-    public boolean isMutedAudio() {
-        return isMutedAudio;
-    }
 
     public String getAccount() {
         return account;
@@ -60,10 +50,6 @@ public class QueueMember implements Serializable {
 
     public String getAvatar() {
         return avatar;
-    }
-
-    public void setMutedAudio(boolean mutedAudio) {
-        isMutedAudio = mutedAudio;
     }
 
 
@@ -79,7 +65,6 @@ public class QueueMember implements Serializable {
             if (!TextUtils.isEmpty(avatar)) {
                 jsonObject.put(AVATAR_KEY, avatar);
             }
-            jsonObject.put(MUTED_AUDIO_KEY, isMutedAudio ? 1 : 0);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -92,4 +77,21 @@ public class QueueMember implements Serializable {
     public String toString() {
         return toJson().toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        QueueMember queueMember = (QueueMember) o;
+        return account.equals(queueMember.account);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return account.hashCode();
+    }
+
+
 }

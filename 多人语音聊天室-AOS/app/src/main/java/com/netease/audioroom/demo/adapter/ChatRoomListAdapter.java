@@ -9,22 +9,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.netease.audioroom.demo.R;
-import com.netease.audioroom.demo.base.BaseAdapter;
+import com.netease.audioroom.demo.base.adapter.BaseAdapter;
 import com.netease.audioroom.demo.model.DemoRoomInfo;
 import com.netease.audioroom.demo.util.CommonUtil;
 
 import java.util.ArrayList;
 
 public class ChatRoomListAdapter extends BaseAdapter<DemoRoomInfo> {
-
+    ArrayList<DemoRoomInfo> dataList;
 
     public ChatRoomListAdapter(ArrayList<DemoRoomInfo> dataList, Context context) {
         super(dataList, context);
     }
 
+
     @Override
     protected RecyclerView.ViewHolder onCreateBaseViewHolder(ViewGroup parent, int viewType) {
-        return new ChatRoomHolder(layoutInflater.inflate(R.layout.chat_room_list_item, parent, false));
+        return new ChatRoomHolder(layoutInflater.inflate(R.layout.item_chat_room_list, parent, false));
     }
 
     @Override
@@ -34,7 +35,7 @@ public class ChatRoomListAdapter extends BaseAdapter<DemoRoomInfo> {
         if (demoRoomInfo == null) {
             return;
         }
-        CommonUtil.loadImage(context, demoRoomInfo.getThumbnail(), roomHolder.ivBg);
+        CommonUtil.loadImage(context, demoRoomInfo.getThumbnail(), roomHolder.ivBg, R.drawable.chat_room_default_bg, 0);
         roomHolder.tvRoomName.setText(demoRoomInfo.getName());
         roomHolder.tvMember.setText(demoRoomInfo.getOnlineUserCount() + "人");
     }
@@ -56,4 +57,11 @@ public class ChatRoomListAdapter extends BaseAdapter<DemoRoomInfo> {
             tvMember = itemView.findViewById(R.id.tv_chat_room_member_num);
         }
     }
+
+    public void refrshList(ArrayList<DemoRoomInfo> dataList) {
+        this.dataList = dataList;
+        notifyDataSetChanged();
+
+    }
+
 }
