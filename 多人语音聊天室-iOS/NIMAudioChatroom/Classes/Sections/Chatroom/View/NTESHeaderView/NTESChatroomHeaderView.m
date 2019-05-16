@@ -88,8 +88,8 @@
 }
 
 //开始声音动画
-- (void)startSoundAnimation {
-    [_iconView startAnimation];
+- (void)startAnimationWithValue:(NSInteger)value {
+    [_iconView startAnimationWithValue:value];
 }
 
 //停止声音动画

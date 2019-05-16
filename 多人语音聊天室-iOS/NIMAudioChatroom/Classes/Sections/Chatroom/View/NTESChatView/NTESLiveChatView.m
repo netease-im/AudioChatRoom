@@ -122,21 +122,25 @@
 - (void)processPendingMessages
 {
     __weak typeof(self) weakSelf = self;
+    __block CGFloat width = 0;
     NSUInteger pendingMessageCount = self.pendingMessages.count;
     if (!weakSelf || pendingMessageCount== 0) {
         return;
     }
     
-    if (weakSelf.tableView.isDecelerating || weakSelf.tableView.isDragging)
-    {
-        //滑动的时候为保证流畅，暂停插入
-        NSTimeInterval delay = 1;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), NTESMessageDataPrepareQueue(), ^{
-            [weakSelf processPendingMessages];
-        });
-        return;
-    }
-    
+    ntes_main_sync_safe(^{
+        if (weakSelf.tableView.isDecelerating || weakSelf.tableView.isDragging)
+        {
+            //滑动的时候为保证流畅，暂停插入
+            NSTimeInterval delay = 1;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), NTESMessageDataPrepareQueue(), ^{
+                [weakSelf processPendingMessages];
+            });
+            return;
+        }
+        width = self.width;
+    });
+
     //获取一定量的消息计算高度，并扔回到主线程
     static NSInteger NTESMaxInsert = 2;
     NSArray *insert = nil;
@@ -160,7 +164,7 @@
         if ([message.remoteExt[@"type"] integerValue] == 1) {
             model.type = NTESMessageNotication;
         }
-        [model caculate:self.width - 2*8.0];
+        [model caculate:width - 2*8.0];
         [models addObject:model];
     }
     

@@ -20,6 +20,7 @@
 #import <MJRefresh.h>
 #import "NTESDemoSystemManager.h"
 #import "NTESChatroomAlertView.h"
+#import "NTESAudioQualityView.h"
 
 typedef NS_ENUM(NSUInteger, NTESHomePageProcessStatus){
     NTESHomePageProcessDidInit = 0,
@@ -31,7 +32,9 @@ typedef NS_ENUM(NSUInteger, NTESHomePageProcessStatus){
 @interface NTESHomePageViewController ()<UITableViewDelegate,
                                          UITableViewDataSource,
                                          NTESHomePageStateDelegate,
-                                         NTESChatroomVCDelegate, UITextFieldDelegate>
+                                         NTESChatroomVCDelegate,
+                                         NTESAudioQualityViewDelegate,
+                                         UITextFieldDelegate>
 
 @property (nonatomic,assign) NTESHomePageProcessStatus status;
 @property (nonatomic,strong) NSMutableArray *chatroomInfos;
@@ -50,7 +53,7 @@ typedef NS_ENUM(NSUInteger, NTESHomePageProcessStatus){
 @property (nonatomic,weak) UIAlertAction *createAction;
 @property (nonatomic,assign) NSInteger inputTextLength;
 @property (nonatomic,assign) BOOL inputComplete;
-
+@property (nonatomic,strong) NTESAudioQualityView *audioQualityView;
 @end
 
 @implementation NTESHomePageViewController
@@ -98,6 +101,7 @@ typedef NS_ENUM(NSUInteger, NTESHomePageProcessStatus){
     _createRoomBtn.size = CGSizeMake(UIMinAdapter(90.0), UIMinAdapter(90.0));
     _createRoomBtn.bottom = self.view.height - 16.0;
     _createRoomBtn.centerX = self.view.width/2;
+    _audioQualityView.frame = self.view.bounds;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -177,7 +181,7 @@ typedef NS_ENUM(NSUInteger, NTESHomePageProcessStatus){
 #pragma mark - Fuction - Login
 - (void)doLogin {
     __weak typeof(self) weakSelf = self;
-    [SVProgressHUD showWithStatus:@"登陆中..."];
+    [SVProgressHUD showWithStatus:@"登录中..."];
     [self doCleanLastChatroom:^(NSError *error) {
         [weakSelf doRequestAccount:^(NTESAccountInfo *accountInfo, NSError *error) {
             if (!error) {
@@ -190,7 +194,7 @@ typedef NS_ENUM(NSUInteger, NTESHomePageProcessStatus){
                                    iconUrl:accountInfo.icon];
                 weakSelf.createRoomBtn.enabled = YES;
             } else {
-                [SVProgressHUD showInfoWithStatus:@"登陆失败"];
+                [SVProgressHUD showInfoWithStatus:@"登录失败"];
                 NetworkStatus netStatus = [NTESDemoSystemManager shareInstance].netStatus;
                 [self showNetworkErrorView:(netStatus == NotReachable)];
                 NELPLogError(@"[demo] request login info fail.[%@]", error);
@@ -258,7 +262,7 @@ typedef NS_ENUM(NSUInteger, NTESHomePageProcessStatus){
               [SVProgressHUD dismiss];
               [weakSelf refreshChatroomList];
           } else {
-              [SVProgressHUD showInfoWithStatus:@"登陆失败"];
+              [SVProgressHUD showInfoWithStatus:@"登录失败"];
               NetworkStatus netStatus = [NTESDemoSystemManager shareInstance].netStatus;
               [self showNetworkErrorView:(netStatus == NotReachable)];
               NELPLogError(@"[demo] login failed!%@", error);
@@ -266,13 +270,15 @@ typedef NS_ENUM(NSUInteger, NTESHomePageProcessStatus){
      }];
 }
 
-- (void)doCreateChatroomWithRoomName:(NSString *)roomName {
+- (void)doCreateChatroomWithRoomName:(NSString *)roomName
+                         audioQulity:(NSInteger)audioQuality{
     NSString *account = _myAccountInfo.account;
     __weak typeof(self) weakSelf = self;
     [[NTESDemoService sharedService] createChatroomWithSid:account
                                                   roomName:roomName
                                                 completion:^(NTESChatroomInfo *chatroomInfo, NSError *error) {
         if (!error) {
+            chatroomInfo.audioQuality = (NTESAudioQuality)audioQuality;
             [NTESDataCenter shareCenter].myCreateChatroom = chatroomInfo;
             [weakSelf showChatRoomVCWithMode:NTESUserModeAnchor
                                         info:chatroomInfo];
@@ -363,6 +369,11 @@ typedef NS_ENUM(NSUInteger, NTESHomePageProcessStatus){
 
 #pragma mark - User Interaction
 - (void)onCreateRoomBtnPressed {
+    [self.audioQualityView showOnView:self.view];
+}
+
+#pragma mark - <NTESAudioQualityViewDelegate>
+- (void)didSureCreateRoomWithAudioQuality:(NSInteger)audioQuality {
     __weak typeof(self) weakSelf = self;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"请输入房间名" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -373,12 +384,13 @@ typedef NS_ENUM(NSUInteger, NTESHomePageProcessStatus){
     UIAlertAction *createAction = [UIAlertAction actionWithTitle:@"创建房间" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UITextField *roomNameTextField = alertController.textFields.firstObject;
         weakSelf.inputComplete = NO;
-        [weakSelf doCreateChatroomWithRoomName:roomNameTextField.text];
+        [weakSelf doCreateChatroomWithRoomName:roomNameTextField.text
+                                   audioQulity:audioQuality];
     }];
     _createAction = createAction;
     createAction.enabled = NO;
     [alertController addAction:createAction];
-
+    
     [alertController addTextFieldWithConfigurationHandler:^(UITextField*_Nonnull textField) {
         textField.placeholder = @"请输入房间名";
         [textField addTarget:weakSelf
@@ -553,5 +565,15 @@ typedef NS_ENUM(NSUInteger, NTESHomePageProcessStatus){
     }
     return _networkErrorView;
 }
+
+- (NTESAudioQualityView *)audioQualityView {
+    if (!_audioQualityView) {
+        _audioQualityView = [[NTESAudioQualityView alloc] init];
+        _audioQualityView.frame = self.view.bounds;
+        _audioQualityView.delegate = self;
+    }
+    return _audioQualityView;
+}
+
 
 @end

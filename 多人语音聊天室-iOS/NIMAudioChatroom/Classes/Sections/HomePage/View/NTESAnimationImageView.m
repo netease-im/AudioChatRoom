@@ -10,9 +10,10 @@
 
 @interface NTESAnimationImageView ()
 
-@property (nonatomic, strong) CALayer *animationLayer;
+@property (nonatomic, weak) CALayer *animationLayer;
 @property (nonatomic, assign) BOOL isAnimating;
 @property (nonatomic, strong) CAAnimationGroup *animationGroup;
+@property (nonatomic, strong) UILabel *valueLab;
 
 @end
 
@@ -22,21 +23,32 @@
     NELPLogInfo(@"NTESAnimationImageView 释放！");
 }
 
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        [self addSubview:self.valueLab];
+    }
+    return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (!CGRectEqualToRect(self.bounds, self.valueLab.frame)) {
+        self.valueLab.frame = self.bounds;
+    }
+}
+
 - (void)startCustomAnimation {
     if (_isAnimating) {
         return;
     }
-    if (!_animationLayer) {
-        _animationLayer = [CALayer layer];
-        NSMutableArray <CALayer *> *pulsingLayers = [self setupAnimationLayers:self.frame];
-        __weak typeof(self) weakSelf = self;
-        [pulsingLayers enumerateObjectsUsingBlock:^(CALayer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [weakSelf.animationLayer addSublayer:obj];
-        }];
-        [self.layer addSublayer:_animationLayer];
-    } else {
-        _animationLayer.hidden = NO;
-    }
+    
+    CALayer *animationLayer = [CALayer layer];
+    NSMutableArray <CALayer *> *pulsingLayers = [self setupAnimationLayers:self.frame];
+    [pulsingLayers enumerateObjectsUsingBlock:^(CALayer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [animationLayer addSublayer:obj];
+    }];
+    [self.layer addSublayer:animationLayer];
+    _animationLayer = animationLayer;
     _isAnimating = YES;
 }
 
@@ -44,19 +56,14 @@
     if (!_isAnimating) {
         return;
     }
-    _animationLayer.hidden = YES;
+    [_animationLayer.sublayers enumerateObjectsUsingBlock:^(__kindof CALayer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeAllAnimations];
+    }];
+    [_animationLayer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    [_animationLayer removeAllAnimations];
+    [_animationLayer removeFromSuperlayer];
     _isAnimating = NO;
-}
-
-- (void)closeCustomAnimation {
-    if (_animationLayer) {
-        [_animationLayer.sublayers enumerateObjectsUsingBlock:^(__kindof CALayer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [obj removeAllAnimations];
-        }];
-        [_animationLayer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
-        [_animationLayer removeFromSuperlayer];
-        _animationLayer = nil;
-    }
+    self.info = nil;
 }
 
 - (NSMutableArray <CALayer *> *)setupAnimationLayers:(CGRect)rect {
@@ -91,6 +98,22 @@
         [ret addObject:pulsingLayer];
     }
     return ret;
+}
+
+- (UILabel *)valueLab {
+    if (!_valueLab) {
+        _valueLab = [[UILabel alloc] init];
+        _valueLab.textColor = [UIColor redColor];
+        _valueLab.font = [UIFont systemFontOfSize:10.0];
+        _valueLab.textAlignment = NSTextAlignmentCenter;
+        _valueLab.hidden = YES;
+    }
+    return _valueLab;
+}
+
+- (void)setInfo:(NSString *)info {
+    _info = info;
+    _valueLab.text = info ? info : @"";
 }
 
 @end
