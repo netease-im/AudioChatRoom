@@ -19,10 +19,12 @@
 
 - (void)caculate:(CGFloat)width
 {
-    M80AttributedLabel *label = NTESCaculateLabel();
-    [label setAttributedText:self.formatMessage];
-    CGSize size = [label sizeThatFits:CGSizeMake(width, CGFLOAT_MAX)];
-    _size = size;
+    ntes_main_sync_safe(^{
+        M80AttributedLabel *label = NTESCaculateLabel();
+        [label setAttributedText:self.formatMessage];
+        CGSize size = [label sizeThatFits:CGSizeMake(width, CGFLOAT_MAX)];
+        _size = size;
+    });
 }
 
 - (NSAttributedString *)formatMessage
@@ -81,13 +83,12 @@
 M80AttributedLabel *NTESCaculateLabel()
 {
     static M80AttributedLabel *label;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    if (!label) {
         label = [[M80AttributedLabel alloc] init];
         label.font = Chatroom_Message_Font;
         label.numberOfLines = 0;
         label.lineBreakMode = kCTLineBreakByCharWrapping;
-    });
+    }
     return label;
 }
 

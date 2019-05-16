@@ -47,9 +47,9 @@
     return cell;
 }
 
-- (void)startSoundAnimation:(NSInteger)micOrder {
+- (void)startSoundAnimation:(NSInteger)micOrder volume:(NSInteger)volume{
     NTESChatroomCollectionViewCell *cell = [self cellWithMicOrder:micOrder];
-    [cell startSoundAnimation];
+    [cell startSoundAnimationWithValue:volume];
 }
 
 - (void)stopSoundAnimation:(NSInteger)micOrder {

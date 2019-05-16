@@ -12,11 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NTESAnimationButton : UIButton
 
+@property (nullable, nonatomic, copy) NSString *info;
+
 - (void)startCustomAnimation;
 
 - (void)stopCustomAnimation;
-
-- (void)closeCustomAnimation;
 
 @end
 

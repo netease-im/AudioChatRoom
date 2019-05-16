@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CGFloat)calculateHeightWithWidth:(CGFloat)width;
 
-- (void)startSoundAnimation:(NSInteger)micOrder;
+- (void)startSoundAnimation:(NSInteger)micOrder volume:(NSInteger)volume;
 
 - (void)stopSoundAnimation:(NSInteger)micOrder;
 

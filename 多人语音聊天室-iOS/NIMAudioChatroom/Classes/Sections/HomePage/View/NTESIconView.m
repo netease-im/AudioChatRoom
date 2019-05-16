@@ -75,12 +75,14 @@
     }];
 }
 
-- (void)startAnimation {
+- (void)startAnimationWithValue:(NSInteger)value {
     [_image startCustomAnimation];
+    _image.info = @(value).stringValue;
 }
 
 - (void)stopAnimation {
     [_image stopCustomAnimation];
+    _image.info = nil;
 }
 
 #pragma mark - Getter

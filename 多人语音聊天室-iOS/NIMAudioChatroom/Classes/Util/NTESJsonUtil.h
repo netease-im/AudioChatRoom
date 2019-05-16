@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable NSDictionary *)dictByJsonString:(NSString *)jsonString;
 
++ (NSString *)jsonString:(NSString *)destinationJsonString addJsonString:(NSString *)jsonString;
+
 @end
 
 NS_ASSUME_NONNULL_END

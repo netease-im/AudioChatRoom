@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL mute;
 
-- (void)startAnimation;
+- (void)startAnimationWithValue:(NSInteger)value;
 
 - (void)stopAnimation;
 

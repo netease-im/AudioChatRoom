@@ -48,6 +48,21 @@
         _meeting.type = NIMNetCallMediaTypeAudio;
         _meeting.actor = (_userMode == NTESUserModeAnchor);
         _meeting.option = [[NIMNetCallOption alloc] init];
+        switch (_chatroomInfo.audioQuality) {
+            case NTESAudioQualityHD:
+            {
+                _meeting.option.preferHDAudio = YES;
+                break;
+            }
+            case NTESAudioQualityHDMusic:
+            {
+                _meeting.option.preferHDAudio = YES;
+                _meeting.option.scene = NIMAVChatSceneHighQualityMusic;
+                break;
+            }
+            default:
+                break;
+        }
     }
     return _meeting;
 }

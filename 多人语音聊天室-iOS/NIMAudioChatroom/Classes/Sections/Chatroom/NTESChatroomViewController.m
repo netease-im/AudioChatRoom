@@ -26,6 +26,9 @@
 #import "NTESChatroomDataSource.h"
 #import "NTESChatroomNotificationHandler.h"
 #import "NTESAuthorityHelper.h"
+#import "NSDictionary+NTESJson.h"
+#import "NTESJsonUtil.h"
+
 
 @interface NTESChatroomViewController ()<NTESChatroomNotificationHandlerDelegate,
                                          NTESMicInviteeListViewControllerDelegate,
@@ -36,6 +39,8 @@
                                          NTESMuteListVCDelegate,
                                          NIMNetCallManagerDelegate>
 @property (nonatomic,assign) CGRect preRect;
+@property (nonatomic,assign) NSTimeInterval lastVolumeMy;
+@property (nonatomic,assign) NSTimeInterval lastVolumeRemote;
 @property (nonatomic,strong) NTESChatroomDataSource *dataSource; //数据源
 @property (nonatomic,strong) NTESChatroomNotificationHandler *handler; //协议处理
 @property (nonatomic,strong) NTESChatroomHeaderView *headerView; //头视图
@@ -47,6 +52,7 @@
 @property (nonatomic,strong) NTESChatroomAlertView *alerView; //alert
 @property (nonatomic,readonly) BOOL networkNotReachable;
 @property (nonatomic,assign) NSInteger selectMicOrder;
+@property (nonatomic,weak) UIAlertController *audioStatusAlert;
 @end
 
 @implementation NTESChatroomViewController
@@ -54,6 +60,7 @@
 - (void)dealloc {
     NELPLogInfo(@"NTESChatroomViewController 释放");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NIMAVChatSDK sharedSDK].netCallManager removeDelegate:self];
 }
 
 - (instancetype)initWithChatroomInfo:(NTESChatroomInfo *)chatroomInfo
@@ -86,6 +93,11 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [_audioStatusAlert dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -140,6 +152,7 @@
                                              selector:@selector(appWillEnterForeground:)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
 }
 
 - (void)updateInputView {
@@ -180,6 +193,7 @@
         [self.view showToastWithMessage:@"网络断开" state:NTESToastStateFail autoDismiss:NO];
     } else {
         [self.view dismissToast];
+        [self fetchChatroomQueue];
     }
 }
 
@@ -376,8 +390,11 @@
             wself.dataSource.isMuteAll = [chatroom inAllMuteMode];
             wself.headerView.chatroomInfo = wself.dataSource.chatroomInfo;
             if (userMode == NTESUserModeAnchor) {
+                [wself updateChatroomExtWithChatroom:chatroom
+                                                info:wself.dataSource.chatroomInfo];
                 [wself reserveMeeting];
             } else {
+                [wself updateChatroomInfoWithChatroom:chatroom];
                 [wself joinMeeting];
             }
             [wself fetchChatroomQueue];
@@ -408,6 +425,29 @@
         }
         [weakSelf.navigationController popViewControllerAnimated:YES];
     }];
+}
+
+- (void)updateChatroomExtWithChatroom:(NIMChatroom *)chatroom
+                                 info:(NTESChatroomInfo *)info {
+    NIMChatroomUpdateRequest *request = [[NIMChatroomUpdateRequest alloc] init];
+    NSString *update = nil;
+    update = [@{
+                NTESChatroomAudioQuality : @(info.audioQuality),
+                } jsonBody];
+    NSString *ext = [NTESJsonUtil jsonString:chatroom.ext addJsonString:update];
+    request.roomId = chatroom.roomId;
+    request.updateInfo = @{@(NIMChatroomUpdateTagExt) : ext};
+    [[NIMSDK sharedSDK].chatroomManager updateChatroomInfo:request completion:^(NSError * _Nullable error) {
+        if (error) {
+            NELPLogError(@"[demo] update chatroomInfo error![%@]", error);
+        }
+    }];
+}
+
+- (void)updateChatroomInfoWithChatroom:(NIMChatroom *)chatroom {
+    NSString *ext = chatroom.ext;
+    NSDictionary *dic = [NTESJsonUtil dictByJsonString:ext];
+    _dataSource.chatroomInfo.audioQuality = [dic[NTESChatroomAudioQuality] integerValue];
 }
 
 - (void)fetchCreaterInfo {
@@ -586,7 +626,7 @@
             }
             //被踢了
             if (micInfo.micReason == NTESMicReasonMicKicked){
-                NELPLogInfo(@"[demo] YAT be kicked");
+                NELPLogInfo(@"[demo] YAT be kicked from maked");
                 [NTESChatroomAlertView showAlertWithMessage:@"您已被主播踢下麦"];
             }
             //被拒绝了
@@ -631,35 +671,6 @@
             break;
     }
     _dataSource.myMicInfo = [micInfo copy];
-}
-
-//清理离开房间的人状态
-- (void)cleanLeaveMember:(NIMChatroomNotificationMember *)member {
-    __weak typeof(self) weakSelf = self; //上麦的人退出房间了，直接踢掉
-    
-    //清理请求连麦列表
-    __block NSInteger delIndex = -1;
-    [_dataSource.connectorArray enumerateObjectsUsingBlock:^(NTESMicInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj.userInfo.account isEqualToString:member.userId]) {
-            delIndex = idx;
-            *stop = YES;
-        }
-    }];
-    if (delIndex >= 0) {
-        [_dataSource.connectorArray removeObjectAtIndex:delIndex];
-        [_connectListView refreshWithDataArray:_dataSource.connectorArray];
-    }
-    
-    //麦位状态更新
-    [_dataSource.micInfoArray enumerateObjectsUsingBlock:^(NTESMicInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj.userInfo.account isEqualToString:member.userId]
-            && ![obj isOffMicStatus]) { //上麦列表
-            obj.micStatus = NTESMicStatusNone;
-            obj.micReason = NTESMicReasonMicKicked;
-            [weakSelf didUpdateChatroomQueueWithMicInfo:obj];
-            *stop = YES;
-        }
-    }];
 }
 
 //批准上麦
@@ -930,7 +941,6 @@
     
     //获取更新的信息
     NTESMicInfo *micInfo = [NTESChatroomQueueHelper micInfoByChatroomQueueValue:value];
-    
     if (_dataSource.userMode == NTESUserModeAnchor
         && micInfo.micOrder == _selectMicOrder) {
         [_alerView dismiss];
@@ -964,9 +974,11 @@
 }
 
 - (void)didUpdateChatroomQueueWithMicInfo:(NTESMicInfo *)micInfo {
-    NSString *roomId = _dataSource.chatroom.roomId;
-    [NTESChatroomQueueHelper updateChatroomQueueWithRoomId:roomId
-                                                   micInfo:micInfo];
+    if (micInfo) {
+        NSString *roomId = _dataSource.chatroom.roomId;
+        [NTESChatroomQueueHelper updateChatroomQueueWithRoomId:roomId
+                                                       micInfo:micInfo];
+    }
 }
 
 - (void)didChatroomMember:(NIMChatroomNotificationMember *)member enter:(BOOL)enter { //进入或离开房间
@@ -974,8 +986,10 @@
     if (!isMyAccount) {
         if (enter) {
             _dataSource.chatroomInfo.onlineUserCount++;
+            NELPLogInfo(@"[demo] user %@ enter room.", member.userId);
         } else {
             _dataSource.chatroomInfo.onlineUserCount--;
+            NELPLogInfo(@"[demo] user %@ leaved room.", member.userId);
         }
     }
     _headerView.chatroomInfo = _dataSource.chatroomInfo;
@@ -984,11 +998,27 @@
                       member.nick, (enter ? @"加入":@"离开")];
     NIMMessage *message = [NTESChatroomMessageHelper systemMessageWithText:text];
     [_chatView addMessages:@[message]];
-    
-    if (_dataSource.userMode == NTESUserModeAnchor && !isMyAccount) { //主播端非自己
-        if (!enter) {//观众离开了
-            [self cleanLeaveMember:member];
-        } else {}
+
+    if (_dataSource.userMode == NTESUserModeAnchor) {
+        //清理请求连麦列表
+        __block NTESMicInfo *micInfo = [_dataSource userInfoOnConnectorArray:member.userId];
+        if (micInfo) {
+            [_dataSource.connectorArray removeObject:micInfo];
+            [_connectListView refreshWithDataArray:_dataSource.connectorArray];
+        }
+        
+        //清理已经上麦的人
+        [_dataSource.micInfoArray enumerateObjectsUsingBlock:^(NTESMicInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj.userInfo.account isEqualToString:member.userId]) {
+                micInfo = obj;
+                *stop = YES;
+            }
+        }];
+//        if (!enter) {
+//            micInfo.micStatus = NTESMicStatusNone;
+//            micInfo.micReason = NTESMicReasonMicKicked;
+//        }
+        [self didUpdateChatroomQueueWithMicInfo:micInfo];
     }
 }
 
@@ -1243,11 +1273,17 @@
 }
 
 -(void)onMyVolumeUpdate:(UInt16)volume {
+    NSTimeInterval cur = [[NSDate date] timeIntervalSince1970];
+    if (cur -  _lastVolumeMy <= 1) {
+        return;
+    }
+    
+    _lastVolumeMy = cur;
     if (_dataSource.userMode == NTESUserModeAnchor) {
         if (volume == 0) {
             [_headerView stopSoundAnimation];
         } else {
-            [_headerView startSoundAnimation];
+            [_headerView startAnimationWithValue:volume];
         }
     } else if (_dataSource.userMode == NTESUserModeConnector){
         NTESMicInfo *info = [_dataSource userInfoOnMicInfoArray:_dataSource.myAccountInfo.account];
@@ -1259,13 +1295,19 @@
             } else {
                 info.isMicMute = NO;
                 _dataSource.myMicInfo.isMicMute = NO;
-                [_micQueueView startSoundAnimation:info.micOrder];
+                [_micQueueView startSoundAnimation:info.micOrder volume:volume];
             }
         }
     }
 }
 
 - (void)onSpeakingUsersReport:(nullable NSArray<NIMNetCallUserInfo *> *)report {
+    
+    NSTimeInterval cur = [[NSDate date] timeIntervalSince1970];
+    if (cur -  _lastVolumeRemote <= 1) {
+        return;
+    }
+    _lastVolumeRemote = cur;
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     [_dataSource.onSoundUsers enumerateObjectsUsingBlock:^(NIMNetCallUserInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -1290,13 +1332,13 @@
     
     [report enumerateObjectsUsingBlock:^(NIMNetCallUserInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([weakSelf.dataSource userIsCreator:obj.uid]) {
-            [weakSelf.headerView startSoundAnimation];
+            [weakSelf.headerView startAnimationWithValue:obj.volume];
         } else {
             if (!dic[obj.uid]) {
                 NTESMicInfo *info = [weakSelf.dataSource userInfoOnMicInfoArray:obj.uid];
                 if (info.micStatus == NTESMicStatusConnectFinished) {
                     info.isMicMute = NO;
-                    [weakSelf.micQueueView startSoundAnimation:info.micOrder];
+                    [weakSelf.micQueueView startSoundAnimation:info.micOrder volume:obj.volume];
                 } else {
                     info.isMicMute = YES;
                     [weakSelf.micQueueView stopSoundAnimation:info.micOrder];
@@ -1307,6 +1349,25 @@
     _dataSource.onSoundUsers = report;
 }
 
+- (void)onAudioExternalDeviceStateChanged:(NIMNetCallAudioExternalDeviceStatus)status {
+    if (status == NIMNetCallAudioExternalDeviceStatusPlugin) {
+        if (!_audioStatusAlert) {
+            if (IS_IPAD) {
+                UIPopoverPresentationController *popPresenter = [self.audioStatusAlert popoverPresentationController];
+                popPresenter.sourceView = self.view;
+                popPresenter.sourceRect = self.view.bounds;
+            }
+            UIAlertController *alert = [self setupAudioStatusAlert];
+            [self presentViewController:alert animated:NO completion:nil];
+            _audioStatusAlert = alert;
+        } else {
+            NELPLogInfo(@"NIMNetCallAudioExternalDeviceStatusPlugin repeate !!!");
+        }
+    } else {
+        [_audioStatusAlert dismissViewControllerAnimated:NO completion:nil];
+    }
+}
+
 #pragma mark - Notication
 - (void)appReachabilityChanged:(NSNotification *)note {
     [self showNetworkStatus];
@@ -1314,6 +1375,13 @@
 
 - (void)appWillEnterForeground:(NSNotification *)note {
     NELP_AUTHORITY_CHECK;
+}
+
+- (void)appWillTerminate:(NSNotification *)note {
+    if (_dataSource.userMode == NTESUserModeConnector){
+        [NTESCustomNotificationHelper sendDropMicNotication:_dataSource.chatroom.creator
+                                                    micInfo:_dataSource.myMicInfo];
+    }
 }
 
 #pragma mark - Getter
@@ -1373,6 +1441,19 @@
 
 - (BOOL)networkNotReachable {
     return ([NTESDemoSystemManager shareInstance].netStatus == NotReachable);
+}
+
+- (UIAlertController *)setupAudioStatusAlert {
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"是" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[NIMAVChatSDK sharedSDK].netCallManager selectAudioExternalDevice:NIMNetCallAudioExternalDeviceTypeHeadphone];
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"否" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [[NIMAVChatSDK sharedSDK].netCallManager selectAudioExternalDevice:NIMNetCallAudioExternalDeviceTypeVoiceBox];
+    }];
+    UIAlertController *ret = [UIAlertController alertControllerWithTitle:@"耳机检测" message:@"检测有设备插入，是否插入了耳机" preferredStyle:UIAlertControllerStyleAlert];
+    [ret addAction:action];
+    [ret addAction:cancel];
+    return ret;
 }
 
 @end

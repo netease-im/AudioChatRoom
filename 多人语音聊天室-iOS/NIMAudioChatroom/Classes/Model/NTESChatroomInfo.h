@@ -10,6 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, NTESAudioQuality){
+    NTESAudioQualityNormal = 0,
+    NTESAudioQualityHD,
+    NTESAudioQualityHDMusic,
+};
+
 @interface NTESChatroomInfo : NSObject<NSCoding>
 
 @property (nonatomic,copy) NSString *roomId;
@@ -19,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) NSInteger onlineUserCount;
 @property (nonatomic,assign) uint64_t createTime;
 @property (nonatomic,assign) BOOL micMute;
+@property (nonatomic,assign) NTESAudioQuality audioQuality;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dic;
 

@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGFloat)calculateHeightWithWidth:(CGFloat)width;
 
 //开始声音动画
-- (void)startSoundAnimation;
+- (void)startAnimationWithValue:(NSInteger)value;
 
 //停止声音动画
 - (void)stopSoundAnimation;

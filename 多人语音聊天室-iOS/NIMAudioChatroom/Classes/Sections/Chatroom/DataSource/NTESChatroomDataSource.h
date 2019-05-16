@@ -14,6 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define NTESChatroomAudioQuality  @"chatroomAudioQuality"
+
 @interface NTESChatroomDataSource : NSObject
 
 @property (nonatomic,strong) NTESChatroomInfo *chatroomInfo;

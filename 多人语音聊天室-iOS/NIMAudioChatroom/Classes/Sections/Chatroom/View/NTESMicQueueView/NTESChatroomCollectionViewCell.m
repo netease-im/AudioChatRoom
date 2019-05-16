@@ -44,12 +44,14 @@
     self.smallIcon.bottom = self.connectBtn.bottom;
 }
 
-- (void)startSoundAnimation {
+- (void)startSoundAnimationWithValue:(NSInteger)value {
     [_connectBtn startCustomAnimation];
+    _connectBtn.info = @(value).stringValue;
 }
 
 - (void)stopSoundAnimation {
     [_connectBtn stopCustomAnimation];
+    _connectBtn.info = nil;
 }
 
 - (void)refresh:(NTESMicInfo *)micInfo
@@ -61,7 +63,7 @@
             self.nameLabel.text = [NSString stringWithFormat:@"麦位%zd",micInfo.micOrder];
             [self.connectBtn setImage:[UIImage imageNamed:@"icon_plus_n"] forState:UIControlStateNormal];
             micInfo.isMicMute = YES;
-            [self.connectBtn closeCustomAnimation];
+            [self.connectBtn stopCustomAnimation];
             self.smallIcon.hidden = YES;
         }
             break;
@@ -70,7 +72,7 @@
             self.nameLabel.text = micInfo.userInfo.nickName ? : @"";
             [self.connectBtn setImage:[UIImage imageNamed:@"icon_connecting_n"] forState:UIControlStateNormal];
             micInfo.isMicMute = YES;
-            [self.connectBtn closeCustomAnimation];
+            [self.connectBtn stopCustomAnimation];
             self.smallIcon.hidden = YES;
         }
             break;
@@ -91,7 +93,7 @@
             self.nameLabel.text = [NSString stringWithFormat:@"麦位%zd",micInfo.micOrder];
             [self.connectBtn setImage:[UIImage imageNamed:@"icon_mic_closed_n"] forState:UIControlStateNormal];
             micInfo.isMicMute = YES;
-            [self.connectBtn closeCustomAnimation];
+            [self.connectBtn stopCustomAnimation];
             self.smallIcon.hidden = YES;
         }
             break;
@@ -100,7 +102,7 @@
             self.nameLabel.text = [NSString stringWithFormat:@"麦位%zd",micInfo.micOrder];
             [self.connectBtn setImage:[UIImage imageNamed:@"icon_mic_mask_n"] forState:UIControlStateNormal];
             micInfo.isMicMute = YES;
-            [self.connectBtn closeCustomAnimation];
+            [self.connectBtn stopCustomAnimation];
             
             self.smallIcon.hidden = YES;
         }
@@ -112,7 +114,7 @@
             [self.smallIcon setImage:[UIImage imageNamed:@"icon_mic_mask_small"]];
             self.smallIcon.hidden = NO;
             micInfo.isMicMute = YES;
-            [self.connectBtn closeCustomAnimation];
+            [self.connectBtn stopCustomAnimation];
         }
             break;
         case NTESMicStatusConnectFinishedWithMuted:
@@ -124,7 +126,7 @@
             self.smallIcon.hidden = NO;
             
             micInfo.isMicMute = YES;
-            [self.connectBtn closeCustomAnimation];
+            [self.connectBtn stopCustomAnimation];
         }
             break;
 

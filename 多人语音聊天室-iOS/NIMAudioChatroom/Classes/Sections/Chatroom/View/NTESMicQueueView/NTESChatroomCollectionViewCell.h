@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak)id<NTESChatroomCollectionViewCellDelegate> delegate;
 
-- (void)startSoundAnimation;
+- (void)startSoundAnimationWithValue:(NSInteger)value;
 
 - (void)stopSoundAnimation;
 
