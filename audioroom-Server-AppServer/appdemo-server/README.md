@@ -45,6 +45,12 @@
      # 建表语句
      use appdemo;
      
+     # 生成递增序号表
+     CREATE TABLE `demo_seq` (
+  	`id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
+ 	 PRIMARY KEY (`id`)
+     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='生成递增序列号表';
+     
      # 语音聊天室素材表
      CREATE TABLE `demo_voice_material` (
       `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
