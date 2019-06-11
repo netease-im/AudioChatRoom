@@ -24,13 +24,10 @@
 {
     if (self = [super init])
     {
-        /*测试环境
-        _appKey = @"0fbb6ba3ef9a98004153e3ff75ef1a2d";
-        _apiURL = @"http://apptest.netease.im:8080/appdemo/voicechat";
-         */
         
         /*线上环境*/
-        _appKey = @"5887359c380d534ad99b33a07d8723e5";
+#warning 这里填写APP KEY
+        _appKey = @"";
         _apiURL = @"https://app.yunxin.163.com/appdemo/voicechat";
     }
     return self;

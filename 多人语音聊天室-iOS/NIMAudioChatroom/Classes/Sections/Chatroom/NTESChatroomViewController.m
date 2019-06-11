@@ -127,8 +127,16 @@
         _playerManager.view.right = self.view.width;
         _playerManager.view.bottom = _textInputView.top - 13.0;
         
+        _playerManager.audioPanelView.size = CGSizeMake(self.view.width, self.view.width * 0.732);
+        _playerManager.audioPanelView.bottom = self.view.height;
+        
         _preRect = self.view.bounds;
     }
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    _playerManager.audioPanelView.hidden = YES;
+    [super touchesBegan:touches withEvent:event];
 }
 
 - (void)setupUI {
@@ -139,6 +147,7 @@
     [self.view addSubview:self.textInputView];
     if (_dataSource.userMode == NTESUserModeAnchor) {
         [self.view addSubview:self.playerManager.view];
+        [self.view addSubview:self.playerManager.audioPanelView];
     }
     [self showNetworkStatus];
 }

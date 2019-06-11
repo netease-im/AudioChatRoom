@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		21B979C8D71B0EEFAA5208F7 /* libPods-NIMAudioChatroom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 003C84D6952B9FA499FC466B /* libPods-NIMAudioChatroom.a */; };
+		871CCBCE22A142F800B04603 /* Synth Effects2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 871CCBCC22A142F700B04603 /* Synth Effects2.caf */; };
+		871CCBCF22A142F800B04603 /* Synth Effects1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 871CCBCD22A142F800B04603 /* Synth Effects1.caf */; };
+		872CD15C229E778A00C06C1E /* NTESAudioPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872CD15B229E778A00C06C1E /* NTESAudioPanelView.m */; };
 		90018BE02224096200391035 /* NTESLiveChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90018BDE2224096200391035 /* NTESLiveChatView.m */; };
 		90018BEA22240B0100391035 /* NTESTextInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90018BE222240B0000391035 /* NTESTextInputView.m */; };
 		90018BEB22240B0100391035 /* NTESGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90018BE422240B0000391035 /* NTESGrowingTextView.m */; };
@@ -41,6 +44,8 @@
 		90CFDD4B21EC610B00DDDFED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90CFDD4A21EC610B00DDDFED /* Assets.xcassets */; };
 		90CFDD4E21EC610B00DDDFED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90CFDD4C21EC610B00DDDFED /* LaunchScreen.storyboard */; };
 		90CFDD5121EC610B00DDDFED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90CFDD5021EC610B00DDDFED /* main.m */; };
+		90CFDD5B21EC610B00DDDFED /* NIMAudioChatroomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 90CFDD5A21EC610B00DDDFED /* NIMAudioChatroomTests.m */; };
+		90CFDD6621EC610B00DDDFED /* NIMAudioChatroomUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 90CFDD6521EC610B00DDDFED /* NIMAudioChatroomUITests.m */; };
 		E61F3328222FA59400DA2F05 /* NTESUserUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E61F3327222FA59400DA2F05 /* NTESUserUtil.m */; };
 		E61F332B222FA5E400DA2F05 /* NTESDataCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = E61F332A222FA5E400DA2F05 /* NTESDataCenter.m */; };
 		E61F3335222FCD7A00DA2F05 /* NTESMuteListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E61F3334222FCD7A00DA2F05 /* NTESMuteListViewController.m */; };
@@ -107,6 +112,10 @@
 
 /* Begin PBXFileReference section */
 		003C84D6952B9FA499FC466B /* libPods-NIMAudioChatroom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NIMAudioChatroom.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		871CCBCC22A142F700B04603 /* Synth Effects2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Synth Effects2.caf"; sourceTree = "<group>"; };
+		871CCBCD22A142F800B04603 /* Synth Effects1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Synth Effects1.caf"; sourceTree = "<group>"; };
+		872CD15A229E778A00C06C1E /* NTESAudioPanelView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NTESAudioPanelView.h; sourceTree = "<group>"; };
+		872CD15B229E778A00C06C1E /* NTESAudioPanelView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NTESAudioPanelView.m; sourceTree = "<group>"; };
 		90018BDE2224096200391035 /* NTESLiveChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTESLiveChatView.m; sourceTree = "<group>"; };
 		90018BDF2224096200391035 /* NTESLiveChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESLiveChatView.h; sourceTree = "<group>"; };
 		90018BE122240B0000391035 /* NTESTextInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESTextInputView.h; sourceTree = "<group>"; };
@@ -177,7 +186,11 @@
 		90CFDD4F21EC610B00DDDFED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90CFDD5021EC610B00DDDFED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		90CFDD5621EC610B00DDDFED /* NIMAudioChatroomTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NIMAudioChatroomTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		90CFDD5A21EC610B00DDDFED /* NIMAudioChatroomTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIMAudioChatroomTests.m; sourceTree = "<group>"; };
+		90CFDD5C21EC610B00DDDFED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90CFDD6121EC610B00DDDFED /* NIMAudioChatroomUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NIMAudioChatroomUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		90CFDD6521EC610B00DDDFED /* NIMAudioChatroomUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIMAudioChatroomUITests.m; sourceTree = "<group>"; };
+		90CFDD6721EC610B00DDDFED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		983C6A5CA64985F65A397CDF /* Pods-NIMAudioChatroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NIMAudioChatroom.release.xcconfig"; path = "Pods/Target Support Files/Pods-NIMAudioChatroom/Pods-NIMAudioChatroom.release.xcconfig"; sourceTree = "<group>"; };
 		D783A8CDD4FE36E2796D8F7A /* Pods-NIMAudioChatroom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NIMAudioChatroom.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NIMAudioChatroom/Pods-NIMAudioChatroom.debug.xcconfig"; sourceTree = "<group>"; };
 		E61F3326222FA59400DA2F05 /* NTESUserUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NTESUserUtil.h; sourceTree = "<group>"; };
@@ -376,6 +389,8 @@
 			isa = PBXGroup;
 			children = (
 				90CFDD4021EC610900DDDFED /* NIMAudioChatroom */,
+				90CFDD5921EC610B00DDDFED /* NIMAudioChatroomTests */,
+				90CFDD6421EC610B00DDDFED /* NIMAudioChatroomUITests */,
 				90CFDD3F21EC610900DDDFED /* Products */,
 				90CFDDA421EC6FC300DDDFED /* Frameworks */,
 				AB813671F78A3164D3DA3623 /* Pods */,
@@ -404,6 +419,24 @@
 				E6E98ADC223B3EF900968637 /* Supporting Files */,
 			);
 			path = NIMAudioChatroom;
+			sourceTree = "<group>";
+		};
+		90CFDD5921EC610B00DDDFED /* NIMAudioChatroomTests */ = {
+			isa = PBXGroup;
+			children = (
+				90CFDD5A21EC610B00DDDFED /* NIMAudioChatroomTests.m */,
+				90CFDD5C21EC610B00DDDFED /* Info.plist */,
+			);
+			path = NIMAudioChatroomTests;
+			sourceTree = "<group>";
+		};
+		90CFDD6421EC610B00DDDFED /* NIMAudioChatroomUITests */ = {
+			isa = PBXGroup;
+			children = (
+				90CFDD6521EC610B00DDDFED /* NIMAudioChatroomUITests.m */,
+				90CFDD6721EC610B00DDDFED /* Info.plist */,
+			);
+			path = NIMAudioChatroomUITests;
 			sourceTree = "<group>";
 		};
 		90CFDDA421EC6FC300DDDFED /* Frameworks */ = {
@@ -580,6 +613,8 @@
 			children = (
 				E699949A22314129008EA92E /* NTESAudioPlayerView.h */,
 				E699949B22314129008EA92E /* NTESAudioPlayerView.m */,
+				872CD15A229E778A00C06C1E /* NTESAudioPanelView.h */,
+				872CD15B229E778A00C06C1E /* NTESAudioPanelView.m */,
 			);
 			path = NTESPlayerView;
 			sourceTree = "<group>";
@@ -623,6 +658,8 @@
 		E6AC7452223A60FE00DC78B3 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				871CCBCD22A142F800B04603 /* Synth Effects1.caf */,
+				871CCBCC22A142F700B04603 /* Synth Effects2.caf */,
 				E6335CC52235FDAD0002EBBA /* 1.mp3 */,
 				E6335CC72235FDB60002EBBA /* 2.mp3 */,
 			);
@@ -758,6 +795,8 @@
 				E6E98ADB223B3EDB00968637 /* nrtc_strip_archs.sh in Resources */,
 				E6335CC82235FDB60002EBBA /* 2.mp3 in Resources */,
 				90CFDD4E21EC610B00DDDFED /* LaunchScreen.storyboard in Resources */,
+				871CCBCE22A142F800B04603 /* Synth Effects2.caf in Resources */,
+				871CCBCF22A142F800B04603 /* Synth Effects1.caf in Resources */,
 				E6335CC62235FDAD0002EBBA /* 1.mp3 in Resources */,
 				90CFDD4B21EC610B00DDDFED /* Assets.xcassets in Resources */,
 			);
@@ -882,6 +921,7 @@
 				E69EDE842230F24F00566E7E /* NTESChatroomDataSource.m in Sources */,
 				E6AC744D223A5A4200DC78B3 /* NELPLogMessage.m in Sources */,
 				900FC31821F8615000DBC8D8 /* NTESUserInfo.m in Sources */,
+				872CD15C229E778A00C06C1E /* NTESAudioPanelView.m in Sources */,
 				E6AC744C223A5A4200DC78B3 /* NELPLogMappingFile.m in Sources */,
 				E6292F682238FBF0005A530D /* NTESAnimationButton.m in Sources */,
 				E6A32C29222D05D100476FD2 /* NTESIconView.m in Sources */,
@@ -937,6 +977,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90CFDD5B21EC610B00DDDFED /* NIMAudioChatroomTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -944,6 +985,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90CFDD6621EC610B00DDDFED /* NIMAudioChatroomUITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

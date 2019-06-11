@@ -14,6 +14,7 @@
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) UIButton *playBtn;
 @property (nonatomic, strong) UIButton *nextBtn;
+@property (nonatomic, strong) UIButton *moreBtn;
 @property (nonatomic, strong) UIView *wrapperView;
 
 @end
@@ -25,6 +26,7 @@
         self.clipsToBounds = YES;
         [self addSubview:self.wrapperView];
         [self addSubview:self.titleLab];
+        [self addSubview:self.moreBtn];
         [self addSubview:self.nextBtn];
         [self addSubview:self.playBtn];
     }
@@ -38,6 +40,8 @@
     _titleLab.frame = CGRectMake(13.0, 5.0, self.width-5.0-13.0, 16.0);
     _playBtn.frame = CGRectMake(4.0, _titleLab.bottom, 32.0, 36.0);
     _nextBtn.frame = CGRectMake(_playBtn.right, _playBtn.top, _playBtn.width, _playBtn.height);
+    _moreBtn.frame = CGRectMake(_nextBtn.right, _nextBtn.top, _playBtn.width, _playBtn.height);
+
 }
 
 - (void)setPlayState:(BOOL)playState {
@@ -64,6 +68,12 @@
 - (void)nextAction:(UIButton *)sender {
     if (_delegate && [_delegate respondsToSelector:@selector(didNextAction)]) {
         [_delegate didNextAction];
+    }
+}
+
+- (void)moreAction:(UIButton *)sender {
+    if (_delegate && [_delegate respondsToSelector:@selector(didMoreAction)]) {
+        [_delegate didMoreAction];
     }
 }
 
@@ -116,6 +126,15 @@
         [_nextBtn addTarget:self action:@selector(nextAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _nextBtn;
+}
+
+- (UIButton *)moreBtn {
+    if (!_moreBtn) {
+        _moreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_moreBtn setImage:[UIImage imageNamed:@"audio_player_more"] forState:UIControlStateNormal];
+        [_moreBtn addTarget:self action:@selector(moreAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _moreBtn;
 }
 
 @end

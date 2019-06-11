@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "NTESAudioPlayerView.h"
+#import "NTESAudioPanelView.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NTESAudioPlayerManager : NSObject
 
 @property (nonatomic, readonly) NTESAudioPlayerView *view;
+@property (nonatomic, readonly) NTESAudioPanelView  *audioPanelView;;
 
 - (void)stop;
 
