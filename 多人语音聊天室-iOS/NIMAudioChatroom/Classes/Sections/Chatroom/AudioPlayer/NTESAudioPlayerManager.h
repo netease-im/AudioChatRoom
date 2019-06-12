@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NTESAudioPlayerView *view;
 @property (nonatomic, readonly) NTESAudioPanelView  *audioPanelView;;
+@property (nonatomic, strong)   UIView  *maskView;;
 
 - (void)stop;
 

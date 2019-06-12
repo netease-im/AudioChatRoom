@@ -161,6 +161,7 @@
 }
 
 - (void)didMoreAction {
+    self.maskView.hidden = NO;
     self.audioPanelView.hidden = NO;
 }
 
@@ -237,6 +238,24 @@
         _audioPanelView.hidden = YES;
     }
     return _audioPanelView;
+}
+
+- (UIView *)maskView {
+    if (!_maskView)
+    {
+        _maskView = [[UIView alloc] init];
+        _maskView.alpha = 0.15;
+        UITapGestureRecognizer *tapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onMaskTapAction:)];
+        [_maskView addGestureRecognizer:tapGR];
+        _maskView.hidden = YES;
+    }
+    return _maskView;
+}
+
+- (void)onMaskTapAction:(UITapGestureRecognizer *)sender
+{
+    self.maskView.hidden = YES;
+    self.audioPanelView.hidden = YES;
 }
 
 @end
