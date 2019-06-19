@@ -112,6 +112,7 @@
 
 /* Begin PBXFileReference section */
 		003C84D6952B9FA499FC466B /* libPods-NIMAudioChatroom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NIMAudioChatroom.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0E5D9D492201948A0015BC18 /* NMC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NMC.framework; sourceTree = "<group>"; };
 		871CCBCC22A142F700B04603 /* Synth Effects2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Synth Effects2.caf"; sourceTree = "<group>"; };
 		871CCBCD22A142F800B04603 /* Synth Effects1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Synth Effects1.caf"; sourceTree = "<group>"; };
 		872CD15A229E778A00C06C1E /* NTESAudioPanelView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NTESAudioPanelView.h; sourceTree = "<group>"; };
@@ -394,6 +395,7 @@
 				90CFDD3F21EC610900DDDFED /* Products */,
 				90CFDDA421EC6FC300DDDFED /* Frameworks */,
 				AB813671F78A3164D3DA3623 /* Pods */,
+				E62E979C22B0AC500057ED11 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -502,6 +504,14 @@
 				900FC39B22034C2300DBC8D8 /* NTESConnectAlertView.m */,
 			);
 			path = NTESConnectListView;
+			sourceTree = "<group>";
+		};
+		E62E979C22B0AC500057ED11 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				0E5D9D492201948A0015BC18 /* NMC.framework */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		E67B0A33222E44FC00C4538C /* HomePage */ = {
@@ -693,7 +703,7 @@
 				90CFDD9221EC6F2400DDDFED /* Embed Frameworks */,
 				0DF4140E1790D130D747FB83 /* [CP] Copy Pods Resources */,
 				E6E98ADD223B3F1400968637 /* ShellScript */,
-				19438CCE8050154B74602B36 /* [CP] Embed Pods Frameworks */,
+				80D4F7177675CFF5FA808277 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -859,7 +869,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NIMAudioChatroom/Pods-NIMAudioChatroom-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		19438CCE8050154B74602B36 /* [CP] Embed Pods Frameworks */ = {
+		80D4F7177675CFF5FA808277 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1137,7 +1147,11 @@
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 7C9A6NRV5L;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/NIMAudioChatroom",
+					"\"$(SRCROOT)/../NIMAVChat/NIMAVChat/Vendors/Libs\"",
+				);
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/NIMAudioChatroom/NIMAudioChatroom-Prefix.pch";
 				INFOPLIST_FILE = NIMAudioChatroom/Info.plist;
@@ -1161,7 +1175,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 569GNZ5392;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/NIMAudioChatroom",
+					"\"$(SRCROOT)/../NIMAVChat/NIMAVChat/Vendors/Libs\"",
+				);
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/NIMAudioChatroom/NIMAudioChatroom-Prefix.pch";
 				INFOPLIST_FILE = NIMAudioChatroom/Info.plist;

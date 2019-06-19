@@ -120,7 +120,7 @@
     self.indexOfEffect = targetIdx;
     NIMNetCallAudioFileMixTask *task = self.effects[self.indexOfEffect];
     task.playbackVolume = self.currentEffectVolumn;
-    [[NIMAVChatSDK sharedSDK].netCallManager startAudioMix:task];
+    [[NIMAVChatSDK sharedSDK].netCallManager playSoundEffect:task];
 }
 
 - (void)changeEffectVolumn:(CGFloat)value {
@@ -132,7 +132,7 @@
     
     NIMNetCallAudioFileMixTask *task = self.effects[self.indexOfEffect];
     task.playbackVolume = self.currentEffectVolumn;
-    [[NIMAVChatSDK sharedSDK].netCallManager updateAudioMix:task];
+    [[NIMAVChatSDK sharedSDK].netCallManager updateSoundEffect:task];
 }
 
 #pragma mark - <NTESAudioPlayerDelegate>
