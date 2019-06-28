@@ -357,7 +357,7 @@
             } else {
                 NTESMicInfo *micInfo = (NTESMicInfo *)info;
                 [NTESCustomNotificationHelper sendCancelMicNotication:weakSelf.dataSource.chatroom.creator
-                                                              micInfo:micInfo];
+                                                                 micInfo:micInfo];
             }
  
     }];
@@ -552,40 +552,31 @@
 
 //更新自己的信息
 - (void)didUpdateMyMicInfo:(NTESMicInfo *)micInfo {
-    if (micInfo.micStatus != NTESMicStatusConnecting) {
-        [self.view dismissToast];
-    }
     switch (micInfo.micStatus) {
         case NTESMicStatusNone:
         {
             //主动下麦
             if (micInfo.micReason == NTESMicReasonDropMic) {
-                if ([_dataSource.myMicInfo isOnMicStatus]) {
-                    NELPLogInfo(@"[demo] YAT drop mic");
-                    [[NIMAVChatSDK sharedSDK].netCallManager setMeetingRole:NO];
-                }
+                NELPLogInfo(@"[demo] YAT drop mic");
+                [[NIMAVChatSDK sharedSDK].netCallManager setMeetingRole:NO];
             }
             //被踢了
             else if (micInfo.micReason == NTESMicReasonMicKicked){
-                if ([_dataSource.myMicInfo isOnMicStatus] ) {
-                    NELPLogInfo(@"[demo] YAT be kicked");
-                    [NTESChatroomAlertView showAlertWithMessage:@"您已被主播踢下麦"];
-                    [[NIMAVChatSDK sharedSDK].netCallManager setMeetingRole:NO];
-                }
+                NELPLogInfo(@"[demo] YAT be kicked");
+                [NTESChatroomAlertView showAlertWithMessage:@"您已被主播踢下麦"];
+                [[NIMAVChatSDK sharedSDK].netCallManager setMeetingRole:NO];
             }
             //被拒绝了
             else if (micInfo.micReason == NTESMicReasonConnectRejected){
-                if (_dataSource.myMicInfo.micStatus == NTESMicStatusConnecting) {
-                    NELPLogInfo(@"[demo] YAT be rejected");
-                    [NTESChatroomAlertView showAlertWithMessage:@"你的申请已被拒绝"];
-                }
+                NELPLogInfo(@"[demo] YAT be rejected");
+                [self.view dismissToast];
+                [NTESChatroomAlertView showAlertWithMessage:@"你的申请已被拒绝"];
             }
             //取消申请了
             else if (micInfo.micReason == NTESMicReasonCancelConnect){
-                if (_dataSource.myMicInfo.micStatus == NTESMicStatusConnecting) {
-                    NELPLogInfo(@"[demo] YAT cancel connect");
-                    [self.view showToastWithMessage:@"已取消申请上麦" state:NTESToastStateSuccess];
-                }
+                NELPLogInfo(@"[demo] YAT cancel connect");
+                [self.view dismissToast];
+                [self.view showToastWithMessage:@"已取消申请上麦" state:NTESToastStateSuccess];
             }
             //麦位打开
             else if (micInfo.micReason == NTESMicReasonOpenMic) {}
@@ -600,11 +591,9 @@
         case NTESMicStatusConnectFinished:{
             //同意上麦了
             if (micInfo.micReason == NTESMicReasonConnectAccepted) {
-                if (_dataSource.myMicInfo.micStatus == NTESMicStatusConnecting) {
-                    NELPLogInfo(@"[demo] YAT allow connect");
-                    [self.view showToastWithMessage:@"申请通过" state:NTESToastStateSuccess];
-                    [[NIMAVChatSDK sharedSDK].netCallManager setMeetingRole:YES];
-                }
+                NELPLogInfo(@"[demo] YAT allow connect");
+                [self.view showToastWithMessage:@"申请通过" state:NTESToastStateSuccess];
+                [[NIMAVChatSDK sharedSDK].netCallManager setMeetingRole:YES];
             }
             
             //被抱麦了
@@ -633,10 +622,9 @@
             _headerView.userMode = NTESUserModeAudience;
             _dataSource.userMode = NTESUserModeAudience;
             if (micInfo.micReason == NTESMicReasonConnectRejected){
-                if (_dataSource.myMicInfo.micStatus == NTESMicStatusConnecting) {
-                    NELPLogInfo(@"[demo] YAT be rejected");
-                    [NTESChatroomAlertView showAlertWithMessage:@"你的申请已被拒绝"];
-                }
+                NELPLogInfo(@"[demo] YAT be rejected");
+                [self.view dismissToast];
+                [NTESChatroomAlertView showAlertWithMessage:@"你的申请已被拒绝"];
             }
             break;
         case NTESMicStatusMasked:
@@ -645,31 +633,25 @@
             
             //主动下麦
             if (micInfo.micReason == NTESMicReasonDropMic) {
-                if ([_dataSource.myMicInfo isOnMicStatus]) {
-                    NELPLogInfo(@"[demo] YAT drop mic");
-                    [[NIMAVChatSDK sharedSDK].netCallManager setMeetingRole:NO];
-                }
+                NELPLogInfo(@"[demo] YAT drop mic");
+                [[NIMAVChatSDK sharedSDK].netCallManager setMeetingRole:NO];
             }
             //被踢了
             if (micInfo.micReason == NTESMicReasonMicKicked){
-                if ([_dataSource.myMicInfo isOnMicStatus]) {
-                    NELPLogInfo(@"[demo] YAT be kicked from maked");
-                    [NTESChatroomAlertView showAlertWithMessage:@"您已被主播踢下麦"];
-                }
+                NELPLogInfo(@"[demo] YAT be kicked from maked");
+                [NTESChatroomAlertView showAlertWithMessage:@"您已被主播踢下麦"];
             }
             //被拒绝了
             else if (micInfo.micReason == NTESMicReasonConnectRejected){
-                if (_dataSource.myMicInfo.micStatus == NTESMicStatusConnecting) {
-                    NELPLogInfo(@"[demo] YAT be rejected");
-                    [NTESChatroomAlertView showAlertWithMessage:@"你的申请已被拒绝"];
-                }
+                NELPLogInfo(@"[demo] YAT be rejected");
+                [self.view dismissToast];
+                [NTESChatroomAlertView showAlertWithMessage:@"你的申请已被拒绝"];
             }
             //取消申请了
             else if (micInfo.micReason == NTESMicReasonCancelConnect){
-                if (_dataSource.myMicInfo.micStatus == NTESMicStatusConnecting) {
-                    NELPLogInfo(@"[demo] YAT cancel connect");
-                    [self.view showToastWithMessage:@"已取消申请上麦" state:NTESToastStateSuccess];
-                }
+                NELPLogInfo(@"[demo] YAT cancel connect");
+                [self.view dismissToast];
+                [self.view showToastWithMessage:@"已取消申请上麦" state:NTESToastStateSuccess];
             }
             break;
         case NTESMicStatusConnectFinishedWithMuted:
@@ -778,7 +760,29 @@
 - (void)didInviteeUserToMicInfo:(NTESMicInfo *)dstMicInfo {
     //member 是否在申请列表中
     NTESMicInfo *srcMicInfo = [_dataSource userInfoOnConnectorArray:dstMicInfo.userInfo.account];
-    if (srcMicInfo) {
+    if (!srcMicInfo) //不在申请列表里，正常抱麦
+    {
+        if (dstMicInfo.micStatus == NTESMicStatusMasked) {
+            dstMicInfo.micStatus = NTESMicStatusConnectFinishedWithMasked;
+        } else {
+            dstMicInfo.micStatus = NTESMicStatusConnectFinished;
+        }
+        dstMicInfo.micReason = NTESMicReasonConnectInvited;
+        [self didUpdateChatroomQueueWithMicInfo:dstMicInfo];
+        
+        //UI
+        NSString *msg = [NSString stringWithFormat:@"已将\"%@\"抱上麦位", dstMicInfo.userInfo.nickName];
+        [self.view makeToast:msg duration:1 position:CSToastPositionCenter];
+        msg = [NSString stringWithFormat:@"\"%@\"进入了麦位%d",
+               dstMicInfo.userInfo.nickName, (int)dstMicInfo.micOrder];
+        [NTESChatroomMessageHelper sendSystemMessage:_dataSource.chatroom.roomId text:msg];
+        
+        //清理其他申请该麦位的人
+        [_dataSource cleanConnectorOnMicOrder:dstMicInfo.micOrder];
+        [_connectListView refreshWithDataArray:_dataSource.connectorArray];
+    }
+    else //在申请列表里，批准到dstMicInfo麦位
+    {
         //异常情况兼容：多人同时申请一个麦位的情况，这时将原来麦位的状态更新到下一个申请这个麦位的人的状态
         __block NTESMicInfo *nextConnectMicInfo = nil;
         [_dataSource.connectorArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -804,28 +808,11 @@
         
         //更新用户申请的麦位状态
         [self didUpdateChatroomQueueWithMicInfo:srcMicInfo];
-        [_dataSource.connectorArray removeObject:srcMicInfo];
+        
+        //批准新麦位
+        dstMicInfo.micStatus = NTESMicStatusConnecting;
+        [self didAllowOnMicWithInfo:dstMicInfo];
     }
-    
-    //抱麦
-    if (dstMicInfo.micStatus == NTESMicStatusMasked) {
-        dstMicInfo.micStatus = NTESMicStatusConnectFinishedWithMasked;
-    } else {
-        dstMicInfo.micStatus = NTESMicStatusConnectFinished;
-    }
-    dstMicInfo.micReason = NTESMicReasonConnectInvited;
-    [self didUpdateChatroomQueueWithMicInfo:dstMicInfo];
-    
-    //UI
-    NSString *msg = [NSString stringWithFormat:@"已将\"%@\"抱上麦位", dstMicInfo.userInfo.nickName];
-    [self.view makeToast:msg duration:1 position:CSToastPositionCenter];
-    msg = [NSString stringWithFormat:@"\"%@\"进入了麦位%d",
-           dstMicInfo.userInfo.nickName, (int)dstMicInfo.micOrder];
-    [NTESChatroomMessageHelper sendSystemMessage:_dataSource.chatroom.roomId text:msg];
-    
-    //清理其他申请该麦位的人
-    [_dataSource cleanConnectorOnMicOrder:dstMicInfo.micOrder];
-    [_connectListView refreshWithDataArray:_dataSource.connectorArray];
 }
 
 //麦克静音

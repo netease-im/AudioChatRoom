@@ -44,8 +44,6 @@
 		90CFDD4B21EC610B00DDDFED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90CFDD4A21EC610B00DDDFED /* Assets.xcassets */; };
 		90CFDD4E21EC610B00DDDFED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90CFDD4C21EC610B00DDDFED /* LaunchScreen.storyboard */; };
 		90CFDD5121EC610B00DDDFED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90CFDD5021EC610B00DDDFED /* main.m */; };
-		90CFDD5B21EC610B00DDDFED /* NIMAudioChatroomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 90CFDD5A21EC610B00DDDFED /* NIMAudioChatroomTests.m */; };
-		90CFDD6621EC610B00DDDFED /* NIMAudioChatroomUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 90CFDD6521EC610B00DDDFED /* NIMAudioChatroomUITests.m */; };
 		E61F3328222FA59400DA2F05 /* NTESUserUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E61F3327222FA59400DA2F05 /* NTESUserUtil.m */; };
 		E61F332B222FA5E400DA2F05 /* NTESDataCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = E61F332A222FA5E400DA2F05 /* NTESDataCenter.m */; };
 		E61F3335222FCD7A00DA2F05 /* NTESMuteListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E61F3334222FCD7A00DA2F05 /* NTESMuteListViewController.m */; };
@@ -79,23 +77,6 @@
 		E6DD28E5222D390000B58CAD /* NTESHomePageStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = E6DD28E4222D390000B58CAD /* NTESHomePageStateView.m */; };
 		E6E98ADB223B3EDB00968637 /* nrtc_strip_archs.sh in Resources */ = {isa = PBXBuildFile; fileRef = E6E98ADA223B3EDB00968637 /* nrtc_strip_archs.sh */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		90CFDD5721EC610B00DDDFED /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 90CFDD3621EC610900DDDFED /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 90CFDD3D21EC610900DDDFED;
-			remoteInfo = NIMAudioChatroom;
-		};
-		90CFDD6221EC610B00DDDFED /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 90CFDD3621EC610900DDDFED /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 90CFDD3D21EC610900DDDFED;
-			remoteInfo = NIMAudioChatroom;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		90CFDD9221EC6F2400DDDFED /* Embed Frameworks */ = {
@@ -186,12 +167,6 @@
 		90CFDD4D21EC610B00DDDFED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		90CFDD4F21EC610B00DDDFED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90CFDD5021EC610B00DDDFED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		90CFDD5621EC610B00DDDFED /* NIMAudioChatroomTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NIMAudioChatroomTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		90CFDD5A21EC610B00DDDFED /* NIMAudioChatroomTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIMAudioChatroomTests.m; sourceTree = "<group>"; };
-		90CFDD5C21EC610B00DDDFED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		90CFDD6121EC610B00DDDFED /* NIMAudioChatroomUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NIMAudioChatroomUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		90CFDD6521EC610B00DDDFED /* NIMAudioChatroomUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIMAudioChatroomUITests.m; sourceTree = "<group>"; };
-		90CFDD6721EC610B00DDDFED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		983C6A5CA64985F65A397CDF /* Pods-NIMAudioChatroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NIMAudioChatroom.release.xcconfig"; path = "Pods/Target Support Files/Pods-NIMAudioChatroom/Pods-NIMAudioChatroom.release.xcconfig"; sourceTree = "<group>"; };
 		D783A8CDD4FE36E2796D8F7A /* Pods-NIMAudioChatroom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NIMAudioChatroom.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NIMAudioChatroom/Pods-NIMAudioChatroom.debug.xcconfig"; sourceTree = "<group>"; };
 		E61F3326222FA59400DA2F05 /* NTESUserUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NTESUserUtil.h; sourceTree = "<group>"; };
@@ -263,20 +238,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				21B979C8D71B0EEFAA5208F7 /* libPods-NIMAudioChatroom.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90CFDD5321EC610B00DDDFED /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90CFDD5E21EC610B00DDDFED /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,8 +351,6 @@
 			isa = PBXGroup;
 			children = (
 				90CFDD4021EC610900DDDFED /* NIMAudioChatroom */,
-				90CFDD5921EC610B00DDDFED /* NIMAudioChatroomTests */,
-				90CFDD6421EC610B00DDDFED /* NIMAudioChatroomUITests */,
 				90CFDD3F21EC610900DDDFED /* Products */,
 				90CFDDA421EC6FC300DDDFED /* Frameworks */,
 				AB813671F78A3164D3DA3623 /* Pods */,
@@ -403,8 +362,6 @@
 			isa = PBXGroup;
 			children = (
 				90CFDD3E21EC610900DDDFED /* NIMAudioChatroom.app */,
-				90CFDD5621EC610B00DDDFED /* NIMAudioChatroomTests.xctest */,
-				90CFDD6121EC610B00DDDFED /* NIMAudioChatroomUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -421,24 +378,6 @@
 				E6E98ADC223B3EF900968637 /* Supporting Files */,
 			);
 			path = NIMAudioChatroom;
-			sourceTree = "<group>";
-		};
-		90CFDD5921EC610B00DDDFED /* NIMAudioChatroomTests */ = {
-			isa = PBXGroup;
-			children = (
-				90CFDD5A21EC610B00DDDFED /* NIMAudioChatroomTests.m */,
-				90CFDD5C21EC610B00DDDFED /* Info.plist */,
-			);
-			path = NIMAudioChatroomTests;
-			sourceTree = "<group>";
-		};
-		90CFDD6421EC610B00DDDFED /* NIMAudioChatroomUITests */ = {
-			isa = PBXGroup;
-			children = (
-				90CFDD6521EC610B00DDDFED /* NIMAudioChatroomUITests.m */,
-				90CFDD6721EC610B00DDDFED /* Info.plist */,
-			);
-			path = NIMAudioChatroomUITests;
 			sourceTree = "<group>";
 		};
 		90CFDDA421EC6FC300DDDFED /* Frameworks */ = {
@@ -703,7 +642,7 @@
 				90CFDD9221EC6F2400DDDFED /* Embed Frameworks */,
 				0DF4140E1790D130D747FB83 /* [CP] Copy Pods Resources */,
 				E6E98ADD223B3F1400968637 /* ShellScript */,
-				80D4F7177675CFF5FA808277 /* [CP] Embed Pods Frameworks */,
+				E97D2C4408046D0580B64E4A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -713,42 +652,6 @@
 			productName = NIMAudioChatroom;
 			productReference = 90CFDD3E21EC610900DDDFED /* NIMAudioChatroom.app */;
 			productType = "com.apple.product-type.application";
-		};
-		90CFDD5521EC610B00DDDFED /* NIMAudioChatroomTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 90CFDD6D21EC610B00DDDFED /* Build configuration list for PBXNativeTarget "NIMAudioChatroomTests" */;
-			buildPhases = (
-				90CFDD5221EC610B00DDDFED /* Sources */,
-				90CFDD5321EC610B00DDDFED /* Frameworks */,
-				90CFDD5421EC610B00DDDFED /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				90CFDD5821EC610B00DDDFED /* PBXTargetDependency */,
-			);
-			name = NIMAudioChatroomTests;
-			productName = NIMAudioChatroomTests;
-			productReference = 90CFDD5621EC610B00DDDFED /* NIMAudioChatroomTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		90CFDD6021EC610B00DDDFED /* NIMAudioChatroomUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 90CFDD7021EC610B00DDDFED /* Build configuration list for PBXNativeTarget "NIMAudioChatroomUITests" */;
-			buildPhases = (
-				90CFDD5D21EC610B00DDDFED /* Sources */,
-				90CFDD5E21EC610B00DDDFED /* Frameworks */,
-				90CFDD5F21EC610B00DDDFED /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				90CFDD6321EC610B00DDDFED /* PBXTargetDependency */,
-			);
-			name = NIMAudioChatroomUITests;
-			productName = NIMAudioChatroomUITests;
-			productReference = 90CFDD6121EC610B00DDDFED /* NIMAudioChatroomUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -767,14 +670,6 @@
 							};
 						};
 					};
-					90CFDD5521EC610B00DDDFED = {
-						CreatedOnToolsVersion = 10.1;
-						TestTargetID = 90CFDD3D21EC610900DDDFED;
-					};
-					90CFDD6021EC610B00DDDFED = {
-						CreatedOnToolsVersion = 10.1;
-						TestTargetID = 90CFDD3D21EC610900DDDFED;
-					};
 				};
 			};
 			buildConfigurationList = 90CFDD3921EC610900DDDFED /* Build configuration list for PBXProject "NIMAudioChatroom" */;
@@ -791,8 +686,6 @@
 			projectRoot = "";
 			targets = (
 				90CFDD3D21EC610900DDDFED /* NIMAudioChatroom */,
-				90CFDD5521EC610B00DDDFED /* NIMAudioChatroomTests */,
-				90CFDD6021EC610B00DDDFED /* NIMAudioChatroomUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -809,20 +702,6 @@
 				871CCBCF22A142F800B04603 /* Synth Effects1.caf in Resources */,
 				E6335CC62235FDAD0002EBBA /* 1.mp3 in Resources */,
 				90CFDD4B21EC610B00DDDFED /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90CFDD5421EC610B00DDDFED /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90CFDD5F21EC610B00DDDFED /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -869,7 +748,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NIMAudioChatroom/Pods-NIMAudioChatroom-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		80D4F7177675CFF5FA808277 /* [CP] Embed Pods Frameworks */ = {
+		E6E98ADD223B3F1400968637 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh \"${SRCROOT}/NIMAudioChatroom/nrtc_strip_archs.sh\"\n";
+		};
+		E97D2C4408046D0580B64E4A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -894,23 +790,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NIMAudioChatroom/Pods-NIMAudioChatroom-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		E6E98ADD223B3F1400968637 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"${SRCROOT}/NIMAudioChatroom/nrtc_strip_archs.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -983,36 +862,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		90CFDD5221EC610B00DDDFED /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				90CFDD5B21EC610B00DDDFED /* NIMAudioChatroomTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90CFDD5D21EC610B00DDDFED /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				90CFDD6621EC610B00DDDFED /* NIMAudioChatroomUITests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		90CFDD5821EC610B00DDDFED /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 90CFDD3D21EC610900DDDFED /* NIMAudioChatroom */;
-			targetProxy = 90CFDD5721EC610B00DDDFED /* PBXContainerItemProxy */;
-		};
-		90CFDD6321EC610B00DDDFED /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 90CFDD3D21EC610900DDDFED /* NIMAudioChatroom */;
-			targetProxy = 90CFDD6221EC610B00DDDFED /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		90CFDD4C21EC610B00DDDFED /* LaunchScreen.storyboard */ = {
@@ -1146,7 +996,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 7C9A6NRV5L;
+				DEVELOPMENT_TEAM = 569GNZ5392;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/NIMAudioChatroom",
@@ -1162,7 +1012,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.netease.nmc.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = YXNMC_WildCard;
+				PROVISIONING_PROFILE_SPECIFIER = "NMC Wildcard";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1195,76 +1045,6 @@
 			};
 			name = Release;
 		};
-		90CFDD6E21EC610B00DDDFED /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = NIMAudioChatroomTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.netease.nim.NIMLiveEntDemo.NIMAudioChatroomTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NIMAudioChatroom.app/NIMAudioChatroom";
-			};
-			name = Debug;
-		};
-		90CFDD6F21EC610B00DDDFED /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = NIMAudioChatroomTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.netease.nim.NIMLiveEntDemo.NIMAudioChatroomTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NIMAudioChatroom.app/NIMAudioChatroom";
-			};
-			name = Release;
-		};
-		90CFDD7121EC610B00DDDFED /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = NIMAudioChatroomUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.netease.nim.NIMLiveEntDemo.NIMAudioChatroomUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = NIMAudioChatroom;
-			};
-			name = Debug;
-		};
-		90CFDD7221EC610B00DDDFED /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = NIMAudioChatroomUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.netease.nim.NIMLiveEntDemo.NIMAudioChatroomUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = NIMAudioChatroom;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1282,24 +1062,6 @@
 			buildConfigurations = (
 				90CFDD6B21EC610B00DDDFED /* Debug */,
 				90CFDD6C21EC610B00DDDFED /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		90CFDD6D21EC610B00DDDFED /* Build configuration list for PBXNativeTarget "NIMAudioChatroomTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				90CFDD6E21EC610B00DDDFED /* Debug */,
-				90CFDD6F21EC610B00DDDFED /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		90CFDD7021EC610B00DDDFED /* Build configuration list for PBXNativeTarget "NIMAudioChatroomUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				90CFDD7121EC610B00DDDFED /* Debug */,
-				90CFDD7221EC610B00DDDFED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
