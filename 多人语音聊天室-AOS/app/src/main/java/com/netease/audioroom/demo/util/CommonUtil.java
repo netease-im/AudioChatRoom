@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.netease.audioroom.demo.cache.DemoCache;
+import com.netease.nrtc.sdk.NRtcConstants;
 
 import java.io.Closeable;
 import java.io.File;
@@ -107,5 +108,33 @@ public class CommonUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String audioDeviceToName(int deviceId) {
+        String audioDevice;
+        switch (deviceId) {
+            case NRtcConstants.AudioDevice.EARPIECE:
+                audioDevice = "手机听筒";
+                break;
+            case NRtcConstants.AudioDevice.BLUETOOTH_HEADSET:
+                audioDevice = "蓝牙耳机";
+                break;
+            case NRtcConstants.AudioDevice.BLUETOOTH_SPEAKER:
+                audioDevice = "蓝牙外放";
+                break;
+            case NRtcConstants.AudioDevice.SPEAKER_PHONE:
+                audioDevice = "手机扬声器";
+                break;
+            case NRtcConstants.AudioDevice.WIRED_HEADSET:
+                audioDevice = "有线耳机";
+                break;
+            case NRtcConstants.AudioDevice.WIRED_SPEAKER:
+                audioDevice = "有线外放";
+                break;
+            default:
+                audioDevice = "手机听筒";
+                break;
+        }
+        return audioDevice;
     }
 }

@@ -21,20 +21,22 @@ import com.netease.audioroom.demo.widget.VerticalItemDecoration;
 import java.util.ArrayList;
 
 public class RequestLinkDialog extends BaseDialogFragment {
+
     RecyclerView requesterRecyclerView;
     RequestlinkAdapter adapter;
     ArrayList<QueueInfo> queueMemberList;
     View view;
 
     TextView title;
-    TextView tvDissmiss;
+    TextView tvDismiss;
 
     public interface IRequestAction {
+
         void refuse(QueueInfo queueInfo);
 
         void agree(QueueInfo queueInfo);
 
-        void dissmiss();
+        void dismiss();
 
     }
 
@@ -84,7 +86,7 @@ public class RequestLinkDialog extends BaseDialogFragment {
         requesterRecyclerView.addItemDecoration
                 (new VerticalItemDecoration(getResources().getColor(R.color.color_000000), 1));
         title = view.findViewById(R.id.title);
-        tvDissmiss = view.findViewById(R.id.dissmiss);
+        tvDismiss = view.findViewById(R.id.dismiss);
 
         buidHeadView();
     }
@@ -133,7 +135,7 @@ public class RequestLinkDialog extends BaseDialogFragment {
                 requestAction.agree(queueInfo);
             }
         });
-        tvDissmiss.setOnClickListener((v) -> dismiss());
+        tvDismiss.setOnClickListener((v) -> dismiss());
     }
 
     public void setRequestAction(IRequestAction requestAction) {
@@ -150,7 +152,7 @@ public class RequestLinkDialog extends BaseDialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        requestAction.dissmiss();
+        requestAction.dismiss();
 
     }
 }

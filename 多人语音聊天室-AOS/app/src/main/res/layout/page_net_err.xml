@@ -23,11 +23,4 @@
         android:src="@drawable/neterricon" />
 
 
-   <!-- <com.netease.audioroom.demo.widget.CreateRoomView
-        android:id="@+id/iv_create_chat_room"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp" />-->
 </RelativeLayout>

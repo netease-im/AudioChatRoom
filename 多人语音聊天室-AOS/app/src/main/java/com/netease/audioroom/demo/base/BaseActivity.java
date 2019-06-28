@@ -51,12 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     };
 
     //监听登录状态
-    private Observer<StatusCode> onlineStatusObserver = new Observer<StatusCode>() {
-        @Override
-        public void onEvent(StatusCode statusCode) {
-            onLoginEvent(statusCode);
-        }
-    };
+    private Observer<StatusCode> onlineStatusObserver = statusCode -> onLoginEvent(statusCode);
 
 
     // 权限控制
@@ -65,7 +60,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.READ_PHONE_STATE};
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.WAKE_LOCK};
 
     protected void requestLivePermission() {
         MPermission.with(this)
@@ -140,4 +136,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.finish();
         overridePendingTransition(R.anim.in_from_left, R.anim.out_from_right);
     }
+
 }

@@ -324,55 +324,49 @@ public class AudienceActivity extends BaseAudioActivity implements IAudience, Vi
 
     @Override
     protected void receiveNotification(CustomNotification customNotification) {
-        if (!TextUtils.equals(customNotification.getFromAccount(), roomInfo.getCreator())) {
-            return;
-        }
-        String content = customNotification.getContent();
-        if (TextUtils.isEmpty(content)) {
-            return;
-        }
-        JSONObject jsonObject = JsonUtil.parse(content);
-        if (jsonObject == null) {
-            return;
-        }
+
     }
 
 
     @Override
     protected void exitRoom() {
-        //自动下麦
-        if (selfQueue != null) {
-            P2PNotificationHelper.cancelLink(selfQueue.getIndex(),
-                    DemoCache.getAccountInfo().account,
-                    roomInfo.getCreator(),
-                    new RequestCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
+        if (selfQueue == null) {
+            release();
+            return;
+        }
+
+        P2PNotificationHelper.cancelLink(selfQueue.getIndex(),
+                DemoCache.getAccountInfo().account,
+                roomInfo.getCreator(),
+                new RequestCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if (selfQueue != null) {
                             int position = selfQueue.getIndex() + 1;
-                            ChatRoomMessage message = ChatRoomMessageBuilder
-                                    .createChatRoomTextMessage(roomInfo.getRoomId(), "退出了麦位" + position);
+                            ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(roomInfo.getRoomId(),
+                                    "退出了麦位" + position);
                             Map<String, Object> ex = new HashMap<>();
                             ex.put("type", 1);
                             message.setRemoteExtension(ex);
                             chatRoomService.sendMessage(message, false);
-                            updateUiByleaveQueue(selfQueue);
-                            release();
+                            updateUiByLeaveQueue(selfQueue);
                         }
 
-                        @Override
-                        public void onFailed(int i) {
-                            ToastHelper.showToast("操作失败");
-                        }
+                        release();
+                    }
 
-                        @Override
-                        public void onException(Throwable throwable) {
-                            ToastHelper.showToast("操作失败");
-                        }
-                    });
-        } else {
-            release();
-        }
+                    @Override
+                    public void onFailed(int i) {
+                        ToastHelper.showToast("操作失败");
+                    }
+
+                    @Override
+                    public void onException(Throwable throwable) {
+                        ToastHelper.showToast("操作失败");
+                    }
+                });
     }
+
 
     @Override
     protected void initQueue(List<Entry<String, String>> entries) {
@@ -538,7 +532,7 @@ public class AudienceActivity extends BaseAudioActivity implements IAudience, Vi
                     } else {
                         removed(queueInfo);
                     }
-                    updateUiByleaveQueue(queueInfo);
+                    updateUiByLeaveQueue(queueInfo);
                 }
                 break;
             case QueueInfo.STATUS_CLOSE_SELF_AUDIO:
@@ -568,7 +562,7 @@ public class AudienceActivity extends BaseAudioActivity implements IAudience, Vi
             @Override
             public void onSuccess(Void aVoid) {
                 ToastHelper.showToast("已取消申请上麦");
-                updateUiByleaveQueue(queueInfo);
+                updateUiByLeaveQueue(queueInfo);
             }
 
             @Override
@@ -595,7 +589,7 @@ public class AudienceActivity extends BaseAudioActivity implements IAudience, Vi
                     @Override
                     public void onSuccess(Void aVoid) {
                         ToastHelper.showToast("您已下麦");
-                        updateUiByleaveQueue(selfQueue);
+                        updateUiByLeaveQueue(selfQueue);
                     }
 
                     @Override
@@ -618,7 +612,7 @@ public class AudienceActivity extends BaseAudioActivity implements IAudience, Vi
         bundle.putString(tipsDialog.TAG, "您的申请已被拒绝");
         tipsDialog.setArguments(bundle);
         tipsDialog.show(getSupportFragmentManager(), "TipsDialog");
-        updateUiByleaveQueue(queueInfo);
+        updateUiByLeaveQueue(queueInfo);
         tipsDialog.setClickListener(() -> {
             tipsDialog.dismiss();
             if (topTipsDialog != null && getSupportFragmentManager() != null) {
@@ -687,7 +681,7 @@ public class AudienceActivity extends BaseAudioActivity implements IAudience, Vi
             tipsDialog.setArguments(bundle);
             tipsDialog.show(getSupportFragmentManager(), tipsDialog.TAG);
             tipsDialog.setClickListener(() -> tipsDialog.dismiss());
-            updateUiByleaveQueue(queueInfo);
+            updateUiByLeaveQueue(queueInfo);
         }
 
     }
@@ -880,7 +874,7 @@ public class AudienceActivity extends BaseAudioActivity implements IAudience, Vi
     }
 
     //离开麦位UI更新
-    private void updateUiByleaveQueue(QueueInfo queueInfo) {
+    private void updateUiByLeaveQueue(QueueInfo queueInfo) {
         updateAudioSwitchVisible(false);
         updateRole(true);
         if (queueInfo.getReason() == QueueInfo.Reason.kickedBySelf

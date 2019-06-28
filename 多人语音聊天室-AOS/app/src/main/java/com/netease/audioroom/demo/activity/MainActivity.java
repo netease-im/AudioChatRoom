@@ -1,12 +1,15 @@
 package com.netease.audioroom.demo.activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.KeyEvent;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.netease.audioroom.demo.R;
 import com.netease.audioroom.demo.adapter.ChatRoomListAdapter;
 import com.netease.audioroom.demo.base.BaseActivity;
@@ -14,6 +17,7 @@ import com.netease.audioroom.demo.base.LoginManager;
 import com.netease.audioroom.demo.base.action.INetworkReconnection;
 import com.netease.audioroom.demo.base.adapter.BaseAdapter;
 import com.netease.audioroom.demo.cache.DemoCache;
+import com.netease.audioroom.demo.dialog.CreateRoomNameDialog;
 import com.netease.audioroom.demo.http.ChatRoomHttpClient;
 import com.netease.audioroom.demo.model.AccountInfo;
 import com.netease.audioroom.demo.model.DemoRoomInfo;
@@ -31,7 +35,10 @@ import com.netease.nimlib.sdk.StatusCode;
 import java.util.ArrayList;
 
 
-public class MainActivity extends BaseActivity implements BaseAdapter.ItemClickListener<DemoRoomInfo>, PullLoadMoreRecyclerView.PullLoadMoreListener {
+public class MainActivity extends BaseActivity implements BaseAdapter.ItemClickListener<DemoRoomInfo>,
+        PullLoadMoreRecyclerView.PullLoadMoreListener,
+        View.OnClickListener,
+        CompoundButton.OnCheckedChangeListener {
 
     private HeadImageView ivAvatar;
     private TextView tvNick;
@@ -43,6 +50,9 @@ public class MainActivity extends BaseActivity implements BaseAdapter.ItemClickL
 
     private int limitPage = 50;
     private int addPage = 20;
+
+    private LinearLayout llSelectAudioQualityContainer;
+    private ArrayList<CheckBox> checkBoxes = new ArrayList<>();
 
 
     @Override
@@ -56,10 +66,29 @@ public class MainActivity extends BaseActivity implements BaseAdapter.ItemClickL
         mRoomList = new ArrayList<>();
         ivAvatar = findViewById(R.id.iv_self_avatar);
         tvNick = findViewById(R.id.tv_self_nick);
+        llSelectAudioQualityContainer = findViewById(R.id.ll_select_audio_quality);
+
+        //顺序很重要
+        checkBoxes.add(findViewById(R.id.cb_normal_audio));
+        checkBoxes.add(findViewById(R.id.cb_high_audio));
+        checkBoxes.add(findViewById(R.id.cb_music_audio));
+
+        int audioQuality = DemoRoomInfo.DEFAULT_QUALITY;
+        for (CheckBox checkBox : checkBoxes) {
+            checkBox.setOnCheckedChangeListener(this);
+            checkBox.setTag(audioQuality);
+            audioQuality++;
+        }
+
+
+        findViewById(R.id.iv_create_chat_room).setOnClickListener(this);
+        findViewById(R.id.tv_create_room).setOnClickListener(this);
+        findViewById(R.id.close_select_audio).setOnClickListener(this);
+
         chatRoomListAdapter = new ChatRoomListAdapter(mRoomList, this);
         // 每个item 16dp 的间隔
         chatRoomListAdapter.setItemClickListener(this);
-        mPullLoadMoreRecyclerView = findViewById(R.id.pullLoadMoreRecyclerView);
+        mPullLoadMoreRecyclerView = findViewById(R.id.pull_load_more_rv);
         //获取mRecyclerView对象
         mRecyclerView = mPullLoadMoreRecyclerView.getRecyclerView();
         mRecyclerView.addItemDecoration(new VerticalItemDecoration(Color.TRANSPARENT, ScreenUtil.dip2px(this, 8)));
@@ -69,6 +98,7 @@ public class MainActivity extends BaseActivity implements BaseAdapter.ItemClickL
         mPullLoadMoreRecyclerView.setLinearLayout();
         mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(this);
         mPullLoadMoreRecyclerView.setAdapter(chatRoomListAdapter);
+
         if (Network.getInstance().isConnected()) {
             onNetWork();
         } else {
@@ -197,20 +227,14 @@ public class MainActivity extends BaseActivity implements BaseAdapter.ItemClickL
     }
 
 
-    //重写返回键事件
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent home = new Intent(Intent.ACTION_MAIN);
-            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            home.addCategory(Intent.CATEGORY_HOME);
-            startActivity(home);
-            return true;
+    public void onBackPressed() {
+        if (llSelectAudioQualityContainer.getVisibility() == View.VISIBLE) {
+            llSelectAudioQualityContainer.setVisibility(View.GONE);
+            return;
         }
-        return super.onKeyDown(keyCode, event);
-
+        super.onBackPressed();
     }
-
 
     @Override
     protected void onLoginEvent(StatusCode statusCode) {
@@ -236,4 +260,43 @@ public class MainActivity extends BaseActivity implements BaseAdapter.ItemClickL
     }
 
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.iv_create_chat_room) {
+            llSelectAudioQualityContainer.setVisibility(View.VISIBLE);
+        } else if (id == R.id.tv_create_room) {
+            int audioQuality = findQuality();
+            CreateRoomNameDialog dialog = CreateRoomNameDialog.newInstance(audioQuality);
+            dialog.show(getSupportFragmentManager(), dialog.TAG);
+            llSelectAudioQualityContainer.setVisibility(View.GONE);
+        } else if (id == R.id.close_select_audio) {
+            llSelectAudioQualityContainer.setVisibility(View.GONE);
+        }
+
+    }
+
+    private int findQuality() {
+        for (CheckBox checkBox : checkBoxes) {
+            if (checkBox.isChecked()) {
+                return (int) checkBox.getTag();
+            }
+        }
+        return DemoRoomInfo.DEFAULT_QUALITY;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+        if (!isChecked) {
+            return;
+        }
+
+        for (CheckBox checkBox : checkBoxes) {
+            if (checkBox != buttonView) {
+                checkBox.setChecked(false);
+            }
+        }
+
+    }
 }

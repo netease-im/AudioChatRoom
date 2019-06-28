@@ -3,6 +3,7 @@ package com.netease.audioroom.demo.base;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.netease.audioroom.demo.R;
 import com.netease.audioroom.demo.adapter.MessageListAdapter;
@@ -31,6 +33,7 @@ import com.netease.audioroom.demo.util.Network;
 import com.netease.audioroom.demo.util.ScreenUtil;
 import com.netease.audioroom.demo.util.ToastHelper;
 import com.netease.audioroom.demo.widget.HeadImageView;
+import com.netease.audioroom.demo.widget.OptionDialog;
 import com.netease.audioroom.demo.widget.VerticalItemDecoration;
 import com.netease.audioroom.demo.widget.unitepage.loadsir.callback.NetErrCallback;
 import com.netease.nimlib.sdk.NIMClient;
@@ -59,7 +62,6 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomTempMuteAddAttachment;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomTempMuteRemoveAttachment;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
-import com.netease.nimlib.sdk.msg.constant.ChatRoomQueueChangeType;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -67,8 +69,10 @@ import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.util.Entry;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 主播与观众基础页，包含所有的通用UI元素
@@ -131,27 +135,13 @@ public abstract class BaseAudioActivity extends BaseActivity implements ViewTree
     protected String creater;
 
 
-    private BaseAdapter.ItemClickListener<QueueInfo> itemClickListener = new BaseAdapter.ItemClickListener<QueueInfo>() {
-        @Override
-        public void onItemClick(QueueInfo model, int position) {
-            onQueueItemClick(model, position);
-        }
-    };
-    private BaseAdapter.ItemLongClickListener<QueueInfo> itemLongClickListener = new BaseAdapter.ItemLongClickListener<QueueInfo>() {
-        @Override
-        public boolean onItemLongClick(QueueInfo model, int position) {
-            return onQueueItemLongClick(model, position);
-        }
-    };
+    private BaseAdapter.ItemClickListener<QueueInfo> itemClickListener = this::onQueueItemClick;
+    private BaseAdapter.ItemLongClickListener<QueueInfo> itemLongClickListener = this::onQueueItemLongClick;
 
     // 自定义通知观察者
-    private Observer<CustomNotification> customNotification = new Observer<CustomNotification>() {
-        @Override
-        public void onEvent(CustomNotification customNotification) {
-            receiveNotification(customNotification);
-        }
-    };
+    private Observer<CustomNotification> customNotification = this::receiveNotification;
 
+    private AlertDialog audioOutputOptionDialog;
     //声音检测
     private AVChatStateObserver stateObserver = new SimpleAVChatStateObserver() {
         @Override
@@ -172,8 +162,58 @@ public abstract class BaseAudioActivity extends BaseActivity implements ViewTree
                     break;
             }
         }
+
+        @Override
+        public void onAudioDeviceChanged(final int selected, Set<Integer> available, boolean shouldSelect) {
+
+            String audioDevice = CommonUtil.audioDeviceToName(selected);
+
+            Toast.makeText(BaseAudioActivity.this, audioDevice, Toast.LENGTH_SHORT).show();
+
+            if (audioOutputOptionDialog != null && audioOutputOptionDialog.isShowing()) {
+                audioOutputOptionDialog.dismiss();
+            }
+
+            // suggestPrompt=true, 需要用户选择的场景
+            if (shouldSelect) {
+                OptionDialog.Option selectedOption = null;
+                List<OptionDialog.Option> options = new ArrayList<>();
+                for (Integer id : available) {
+                    OptionDialog.Option option = new OptionDialog.Option(CommonUtil.audioDeviceToName(id), id);
+                    options.add(option);
+                    if (id == selected) {
+                        selectedOption = option;
+                    }
+                }
+                Collections.sort(options);
+
+                audioOutputOptionDialog = OptionDialog.make(BaseAudioActivity.this,
+                        options,
+                        selectedOption,
+                        selected1 -> AVChatManager.getInstance().selectAudioDevice(selected1.getValue()))
+                        .setTitle("请选择插入的音频设备类型")
+                        .create();
+                audioOutputOptionDialog.show();
+            }
+        }
+
+        @Override
+        public void onAudioEffectPlayEvent(int effectId, int event) {
+          BaseAudioActivity.this.onAudioEffectPlayEvent(effectId, event);
+        }
+
+        @Override
+        public void onAudioEffectPreload(int effectId, int result) {
+            BaseAudioActivity.this.onAudioEffectPreload(effectId, result);
+        }
     };
 
+    protected void onAudioEffectPlayEvent(int effectId, int event) {
+    }
+
+
+    protected void onAudioEffectPreload(int effectId, int result) {
+    }
     //聊天室消息观察者
     private Observer<List<ChatRoomMessage>> messageObserver = new Observer<List<ChatRoomMessage>>() {
         @Override
@@ -196,7 +236,7 @@ public abstract class BaseAudioActivity extends BaseActivity implements ViewTree
                             logInfo.append("成员进入聊天室：nick =  ").append(memberIn.getOperatorNick())
                                     .append(", account = ").append(memberIn.getOperator());
                             memberIn(memberIn);
-                            updateRoonInfo();
+                            updateRoomInfo();
                             break;
                         // 成员退出聊天室
                         case ChatRoomMemberExit:
@@ -204,7 +244,7 @@ public abstract class BaseAudioActivity extends BaseActivity implements ViewTree
                             logInfo.append("成员退出聊天室：nick = ").append(memberExit.getOperatorNick()).
                                     append(",  account = ").append(memberExit.getOperator());
                             memberExit(memberExit);
-                            updateRoonInfo();
+                            updateRoomInfo();
                             break;
                         //成员被禁言
                         case ChatRoomMemberTempMuteAdd:
@@ -301,19 +341,17 @@ public abstract class BaseAudioActivity extends BaseActivity implements ViewTree
     };
 
     //被踢出通知
-    Observer<ChatRoomKickOutEvent> kickOutObserver = new Observer<ChatRoomKickOutEvent>() {
-        @Override
-        public void onEvent(ChatRoomKickOutEvent chatRoomKickOutEvent) {
-            TipsDialog tipsDialog = new TipsDialog();
-            Bundle bundle = new Bundle();
-            bundle.putString(tipsDialog.TAG, "该房间已被主播解散");
-            tipsDialog.setArguments(bundle);
-            tipsDialog.show(getSupportFragmentManager(), tipsDialog.TAG);
-            tipsDialog.setClickListener(() -> {
-                tipsDialog.dismiss();
-                release();
-            });
-        }
+    Observer<ChatRoomKickOutEvent> kickOutObserver = chatRoomKickOutEvent -> {
+        TipsDialog tipsDialog = new TipsDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString(tipsDialog.TAG, "该房间已被主播解散");
+        tipsDialog.setArguments(bundle);
+        tipsDialog.show(getSupportFragmentManager(), tipsDialog.TAG);
+        tipsDialog.setClickListener(() -> {
+            tipsDialog.dismiss();
+            release();
+        });
+
     };
 
     @Override
@@ -383,7 +421,7 @@ public abstract class BaseAudioActivity extends BaseActivity implements ViewTree
         for (String nick : exitNicks) {
             SimpleMessage simpleMessage = new SimpleMessage("", "“" + nick + "”离开了房间", SimpleMessage.TYPE_MEMBER_CHANGE);
             msgAdapter.appendItem(simpleMessage);
-            updateRoonInfo();
+            updateRoomInfo();
         }
         scrollToBottom();
     }
@@ -396,7 +434,7 @@ public abstract class BaseAudioActivity extends BaseActivity implements ViewTree
         for (String nick : inNicks) {
             SimpleMessage simpleMessage = new SimpleMessage("", "“" + nick + "”进了房间", SimpleMessage.TYPE_MEMBER_CHANGE);
             msgAdapter.appendItem(simpleMessage);
-            updateRoonInfo();
+            updateRoomInfo();
 
         }
         scrollToBottom();
@@ -631,7 +669,6 @@ public abstract class BaseAudioActivity extends BaseActivity implements ViewTree
     protected void onQueueChange(ChatRoomQueueChangeAttachment queueChange) {
 
 
-
     }
 
     @Override
@@ -659,8 +696,17 @@ public abstract class BaseAudioActivity extends BaseActivity implements ViewTree
     }
 
     protected void joinAudioRoom() {
+
         AVChatManager.getInstance().enableRtc();
-        AVChatManager.getInstance().setChannelProfile(AVChatChannelProfile.CHANNEL_PROFILE_HIGH_QUALITY_MUSIC);
+
+        if (roomInfo.getAudioQuality() == DemoRoomInfo.MUSIC_QUALITY) {
+            AVChatManager.getInstance().setParameter(AVChatParameters.KEY_AUDIO_HIGH_QUALITY, true);
+            // 音乐模式需要设置一下
+            AVChatManager.getInstance().setChannelProfile(AVChatChannelProfile.CHANNEL_PROFILE_HIGH_QUALITY_MUSIC);
+        } else if (roomInfo.getAudioQuality() == DemoRoomInfo.HIGH_QUALITY) {
+            AVChatManager.getInstance().setParameter(AVChatParameters.KEY_AUDIO_HIGH_QUALITY, true);
+        }
+
         AVChatManager.getInstance().setParameters(getRtcParameters());
         AVChatManager.getInstance().setParameter(AVChatParameters.KEY_AUDIO_REPORT_SPEAKER, true);
         AVChatManager.getInstance().joinRoom2(roomInfo.getRoomId(), AVChatType.AUDIO, new AVChatCallback<AVChatData>() {
@@ -687,7 +733,7 @@ public abstract class BaseAudioActivity extends BaseActivity implements ViewTree
 
     }
 
-    protected void updateRoonInfo() {
+    protected void updateRoomInfo() {
         chatRoomService.fetchRoomInfo(roomInfo.getRoomId()).setCallback(new RequestCallback<ChatRoomInfo>() {
             @Override
             public void onSuccess(ChatRoomInfo param) {

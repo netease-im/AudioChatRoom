@@ -7,8 +7,11 @@ android {
         applicationId "com.netease.audioroom.demo"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        buildToolsVersion '27.0.3'
+
+
         ndk {
             //设置支持的SO库架构
             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
@@ -16,10 +19,21 @@ android {
     }
 
 
+    signingConfigs {
+        release {
+            storeFile file('release.keystore')
+            storePassword '123456'
+            keyAlias 'AudioRoom'
+            keyPassword '123456'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     sourceSets {
@@ -27,12 +41,13 @@ android {
             jniLibs.srcDir('libs')
         }
     }
+
     useLibrary 'org.apache.http.legacy'
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '27.0.3'
 }
 
 dependencies {
@@ -52,10 +67,11 @@ dependencies {
 
     // 添加依赖。注意，版本号必须一致。
     // 基础功能 (必需)
-    implementation 'com.netease.nimlib:basesdk:6.1.1'
-    // 音视频需要
-    implementation 'com.netease.nimlib:nrtc:6.1.1'
-    // 音视频需要
-    implementation 'com.netease.nimlib:avchat:6.1.1'
-    implementation 'com.netease.nimlib:chatroom:6.1.1'
+//    implementation 'com.netease.nimlib:basesdk:6.5.0'
+//    // 音视频需要
+//    implementation 'com.netease.nimlib:nrtc:6.5.0'
+//    // 音视频需要
+//    implementation 'com.netease.nimlib:avchat:6.5.0'
+//    //聊天室
+//    implementation 'com.netease.nimlib:chatroom:6.5.0'
 }

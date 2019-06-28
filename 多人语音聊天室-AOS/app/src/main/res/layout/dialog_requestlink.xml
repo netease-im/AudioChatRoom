@@ -38,7 +38,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/dissmiss"
+        android:id="@+id/dismiss"
         android:layout_width="@dimen/dimen_65"
         android:layout_height="@dimen/dimen_40"
         android:layout_gravity="center"

@@ -1,5 +1,7 @@
 package com.netease.audioroom.demo.model;
 
+import android.util.Log;
+
 import com.netease.nimlib.sdk.avchat.AVChatStateObserver;
 import com.netease.nimlib.sdk.avchat.model.AVChatAudioFrame;
 import com.netease.nimlib.sdk.avchat.model.AVChatNetworkStats;
@@ -7,12 +9,13 @@ import com.netease.nimlib.sdk.avchat.model.AVChatSessionStats;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 
 import java.util.Map;
+import java.util.Set;
 
-/**
- * Created by huangjun on 2017/5/9.
- */
 
 public class SimpleAVChatStateObserver implements AVChatStateObserver {
+
+    private static final String TAG = "AVChatStateObserver";
+
     @Override
     public void onTakeSnapshotResult(String account, boolean success, String file) {
 
@@ -40,11 +43,61 @@ public class SimpleAVChatStateObserver implements AVChatStateObserver {
 
     @Override
     public void onAudioMixingProgressUpdated(long progressMs, long durationMs) {
-
+//        Log.i(TAG, "onAudioMixingProgressUpdated , progress = " + progressMs + ", duration = " + durationMs);
     }
 
     @Override
     public void onAudioMixingEvent(int event) {
+        Log.i(TAG, "onAudioMixingEvent , event = " + event);
+    }
+
+    @Override
+    public void onAudioEffectPreload(int effectId, int result) {
+
+    }
+
+    @Override
+    public void onAudioEffectPlayEvent(int effectId, int event) {
+
+    }
+
+    @Override
+    public void onPublishVideoResult(int i) {
+
+    }
+
+    @Override
+    public void onUnpublishVideoResult(int i) {
+
+    }
+
+    @Override
+    public void onSubscribeVideoResult(String s, int i) {
+
+    }
+
+    @Override
+    public void onUnsubscribeVideoResult(String s, int i) {
+
+    }
+
+    @Override
+    public void onRemotePublishVideo(String s) {
+
+    }
+
+    @Override
+    public void onRemoteUnpublishVideo(String s) {
+
+    }
+
+    @Override
+    public void onUnsubscribeAudioResult(int i) {
+
+    }
+
+    @Override
+    public void onSubscribeAudioResult(int i) {
 
     }
 
@@ -125,9 +178,10 @@ public class SimpleAVChatStateObserver implements AVChatStateObserver {
     }
 
     @Override
-    public void onAudioDeviceChanged(int device) {
+    public void onAudioDeviceChanged(int device, Set<Integer> set, boolean shouldSelect) {
 
     }
+
 
     @Override
     public void onReportSpeaker(Map<String, Integer> speakers, int mixedEnergy) {

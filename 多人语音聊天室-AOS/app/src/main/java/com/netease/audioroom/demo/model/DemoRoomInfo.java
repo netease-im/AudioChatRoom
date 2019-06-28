@@ -8,34 +8,22 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomUpdateInfo;
  */
 public class DemoRoomInfo extends ChatRoomUpdateInfo {
 
+    private static int BASE = 0;
+    public static final int DEFAULT_QUALITY = BASE++;
+    public static final int HIGH_QUALITY = BASE++;
+    public static final int MUSIC_QUALITY = BASE++;
+
+
     private String roomId;       // roomId
     private String creator;       // creator
     private String name;         // 聊天室名称
     private int onlineUserCount; // 当前在线用户数量
     private String thumbnail; // 聊天室背景图
 
+    private int audioQuality = DEFAULT_QUALITY;
 
     public DemoRoomInfo() {
     }
-
-//    public DemoRoomInfo(String jsonStr) {
-//        JSONObject jsonObject = JsonUtil.parse(jsonStr);
-//        if (jsonObject == null) {
-//            roomId = null;
-//            creator = null;
-//            name = null;
-//            onlineUserCount = 0;
-//            isMute = false;
-//            isMicrophoneOpen = true;//默认打开
-//            return;
-//        }
-//        roomId = jsonObject.optString("roomId");
-//        creator = jsonObject.optString("creator");
-//        name = jsonObject.optString("name");
-//        onlineUserCount = jsonObject.optInt("onlineUserCount");
-//        isMute = jsonObject.optBoolean("isMute");
-//        isMicrophoneOpen = jsonObject.optBoolean("isMicrophoneOpen");
-//    }
 
 
     public String getCreator() {
@@ -81,4 +69,12 @@ public class DemoRoomInfo extends ChatRoomUpdateInfo {
         this.thumbnail = thumbnail;
     }
 
+
+    public int getAudioQuality() {
+        return audioQuality;
+    }
+
+    public void setAudioQuality(int audioQuality) {
+        this.audioQuality = audioQuality;
+    }
 }

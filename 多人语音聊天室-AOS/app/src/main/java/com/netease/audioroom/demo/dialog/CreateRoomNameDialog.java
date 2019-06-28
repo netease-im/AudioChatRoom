@@ -1,5 +1,6 @@
 package com.netease.audioroom.demo.dialog;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,12 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.netease.audioroom.demo.R;
 import com.netease.audioroom.demo.activity.AudioLiveActivity;
-import com.netease.audioroom.demo.base.action.INetworkReconnection;
 import com.netease.audioroom.demo.cache.DemoCache;
 import com.netease.audioroom.demo.http.ChatRoomHttpClient;
 import com.netease.audioroom.demo.model.DemoRoomInfo;
@@ -25,21 +26,33 @@ import com.netease.audioroom.demo.util.NetworkChange;
 import com.netease.audioroom.demo.util.NetworkUtils;
 import com.netease.audioroom.demo.util.NetworkWatcher;
 import com.netease.audioroom.demo.util.ToastHelper;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 
 import java.util.Observable;
 
 public class CreateRoomNameDialog extends BaseDialogFragment {
 
-    View mConentView;
-    EditText mEditText;
-    Button mBtnCancal;
-    Button mBtnCreaterRoom;
 
-    View mRootview, mLoading;
+    private View mContextView;
+    private EditText mEditText;
+    private Button mBtnCancel;
+    private Button mBtnCreateRoom;
 
-    boolean hasNet = true;
+    private View mRootView, mLoading;
 
-    //网络状态监听
+    private boolean hasNet = true;
+
+    private final static String AUDIO_QUALITY = "audio_quality";
+
+    private int audioQuality;
+
+    public static CreateRoomNameDialog newInstance(int audioQuality) {
+        CreateRoomNameDialog dialog = new CreateRoomNameDialog();
+        Bundle arg = new Bundle();
+        arg.putInt(AUDIO_QUALITY, audioQuality);
+        dialog.setArguments(arg);
+        return dialog;
+    }
 
 
     @Override
@@ -47,16 +60,15 @@ public class CreateRoomNameDialog extends BaseDialogFragment {
         super.onCreate(savedInstanceState);
         setStyle(android.app.DialogFragment.STYLE_NO_TITLE, R.style.create_dialog_fragment);
 
-
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        mConentView = inflater.inflate(R.layout.dialog_creater_roomname, container, false);
-
-        return mConentView;
+        mContextView = inflater.inflate(R.layout.dialog_creater_roomname, container, false);
+        audioQuality = getArguments().getInt(AUDIO_QUALITY, DemoRoomInfo.DEFAULT_QUALITY);
+        return mContextView;
     }
 
     @Override
@@ -74,11 +86,7 @@ public class CreateRoomNameDialog extends BaseDialogFragment {
             public void update(Observable observable, Object data) {
                 super.update(observable, data);
                 Network network = (Network) data;
-                if (!network.isConnected()) {
-                    hasNet = false;
-                } else {
-                    hasNet = true;
-                }
+                hasNet = network.isConnected();
             }
         };
 
@@ -86,12 +94,12 @@ public class CreateRoomNameDialog extends BaseDialogFragment {
     }
 
     private void initView() {
-        mEditText = mConentView.findViewById(R.id.eturl);
-        mBtnCancal = mConentView.findViewById(R.id.btnCancal);
-        mBtnCreaterRoom = mConentView.findViewById(R.id.btnCreaterRoom);
-        mRootview = mConentView.findViewById(R.id.root);
-        mLoading = mConentView.findViewById(R.id.loadingview);
-        mBtnCreaterRoom.setEnabled(false);
+        mEditText = mContextView.findViewById(R.id.eturl);
+        mBtnCancel = mContextView.findViewById(R.id.btnCancal);
+        mBtnCreateRoom = mContextView.findViewById(R.id.btnCreaterRoom);
+        mRootView = mContextView.findViewById(R.id.root);
+        mLoading = mContextView.findViewById(R.id.loadingview);
+        mBtnCreateRoom.setEnabled(false);
 
     }
 
@@ -115,21 +123,21 @@ public class CreateRoomNameDialog extends BaseDialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
-                    mBtnCreaterRoom.setEnabled(true);
-                    mBtnCreaterRoom.setTextColor(getContext().getResources().getColor(R.color.color_2799ff));
+                    mBtnCreateRoom.setEnabled(true);
+                    mBtnCreateRoom.setTextColor(getContext().getResources().getColor(R.color.color_2799ff));
                 } else {
-                    mBtnCreaterRoom.setEnabled(false);
-                    mBtnCreaterRoom.setTextColor(getContext().getResources().getColor(R.color.color_8fb5e1));
+                    mBtnCreateRoom.setEnabled(false);
+                    mBtnCreateRoom.setTextColor(getContext().getResources().getColor(R.color.color_8fb5e1));
                 }
             }
         });
-        mBtnCancal.setOnClickListener((v) -> dismiss());
-        mBtnCreaterRoom.setOnClickListener((v) -> {
+        mBtnCancel.setOnClickListener((v) -> dismiss());
+        mBtnCreateRoom.setOnClickListener((v) -> {
             if (!hasNet) {
                 ToastHelper.showToast(" 请检查你的网络");
             } else {
-                mBtnCreaterRoom.setEnabled(false);
-                isLoading(true);
+                mBtnCreateRoom.setEnabled(false);
+                updateLoadingUI(true);
                 createRoom(mEditText.getText().toString());
             }
 
@@ -143,11 +151,12 @@ public class CreateRoomNameDialog extends BaseDialogFragment {
                 new ChatRoomHttpClient.ChatRoomHttpCallback<DemoRoomInfo>() {
                     @Override
                     public void onSuccess(DemoRoomInfo roomInfo) {
-                        mBtnCreaterRoom.setEnabled(true);
-                        isLoading(false);
+                        updateLoadingUI(false);
                         if (roomInfo != null) {
+                            roomInfo.setAudioQuality(audioQuality);
                             AudioLiveActivity.start(getContext(), roomInfo);
                             dismiss();
+                            hideSoftInput();
                         } else {
                             ToastHelper.showToast("创建房间失败，返回信息为空");
                         }
@@ -155,8 +164,7 @@ public class CreateRoomNameDialog extends BaseDialogFragment {
 
                     @Override
                     public void onFailed(int code, String errorMsg) {
-                        isLoading(false);
-                        mBtnCreaterRoom.setEnabled(true);
+                        mBtnCreateRoom.setEnabled(true);
                         if (TextUtils.isEmpty(errorMsg)) {
                             errorMsg = "参数错误";
                         }
@@ -165,15 +173,16 @@ public class CreateRoomNameDialog extends BaseDialogFragment {
                 });
     }
 
+    private void hideSoftInput() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
+    }
 
-    private void isLoading(Boolean isloading) {
-        if (isloading) {
-            mLoading.setVisibility(View.VISIBLE);
-            mRootview.setVisibility(View.INVISIBLE);
-        } else {
-            mLoading.setVisibility(View.GONE);
-            mRootview.setVisibility(View.VISIBLE);
-        }
+
+    private void updateLoadingUI(boolean isLoading) {
+        mLoading.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        mRootView.setVisibility(isLoading ? View.INVISIBLE : View.VISIBLE);
+        mBtnCreateRoom.setEnabled(!isLoading);
     }
 
     @Override
