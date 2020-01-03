@@ -24,8 +24,7 @@
 {
     if (self = [super init])
     {
-#warning 填入你的appkey
-        _appKey = @"填入你的appkey";
+        _appKey = @"5887359c380d534ad99b33a07d8723e5";
         _apiURL = @"https://app.yunxin.163.com/appdemo/voicechat";
     }
     return self;
